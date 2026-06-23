@@ -5,3 +5,4 @@ The project is officially undergoing a massive, continuous translation phase fro
 - The overarching goal is a function-by-function, full GUI rewrite.
 - Initialized core global types (`bcs.h`, `bcsstring.h`) across Go, Rust, C#, and Java to act as the foundational semantic mapping layer for the cross-platform ports.
 - Ported memory ownership paradigms (`bcspointer.h`) and event routing paradigms (`bcssignal.h`) establishing the foundation for `BcsInputArbitrator` multithreaded logic across languages.
+- Ported core global logging and baseline enumeration structures (`bcscoretypes.h`).
