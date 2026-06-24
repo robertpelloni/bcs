@@ -17,3 +17,4 @@ The project is officially undergoing a massive, continuous translation phase fro
 =======
 >>>>>>> origin/master
 - Executive Sync Complete: `master` reconciled with `main`, resolving divergent histories on submodules and merging in the initial porting structures.
+- Transitioned porting strategy into the `gui/kernel` subsystem by translating `bcsapplication.h` and `bcswindow.h`, bridging core application execution loops and top-level window layout management for native OS windowing contexts.

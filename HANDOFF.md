@@ -498,3 +498,8 @@
 * **Merge**: Fast-forwarded `main` to align perfectly with `master` taking all upstream submodule corrections and the massive 9-stage multi-language porting structural commits.
 * **Versioning**: Bumped the release to `0.3.0` marking the completion of the Core scaffolding block.
 * **Next Target**: The next model should shift into porting `src/gui/` elements (widgets, painting, windowing) mapped back to these newly generated core paradigms.
+
+## Session Summary: Multi-Language Port Initialization Phase 10
+* **Action**: Commenced porting the `gui` framework surface layer.
+* **Application**: Ported `BcsApplication` handling `main()` argument ingestion and bootstrapping the underlying native `BcsEventLoop` execution blocking patterns.
+* **Windowing**: Ported `BcsWindow` laying down standard API translations for rendering contexts (Geometry dimensions via `BcsRect`, Titles, and generic Show/Hide visibility booleans).
