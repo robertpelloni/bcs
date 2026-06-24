@@ -7,3 +7,6 @@ The project is officially undergoing a massive, continuous translation phase fro
 - Ported memory ownership paradigms (`bcspointer.h`) and event routing paradigms (`bcssignal.h`) establishing the foundation for `BcsInputArbitrator` multithreaded logic across languages.
 - Ported core global logging and baseline enumeration structures (`bcscoretypes.h`).
 - Ported core generic container classes (`bcsvector.h` and `bcsmap.h`) establishing dynamically resizing arrays and thread-safe hash maps mapped natively to Go, Rust, Java, and C#.
+- Ported core multithreading concepts (`bcsthread.h` and `bcsmutex.h`) creating a cross-platform synchronization and concurrency abstraction matching Go, Rust, Java, and C# natively.
+- Ported core I/O abstractions (`bcsfile.h` and `bcsdir.h`), exposing a unified cross-language API for file system manipulation and discovery.
+- Extracted foundational core `tools/` definitions (`bcsvariant.h`, `qpoint.h`/`qsize.h`/`qrect.h` equivalents) modeling dynamic properties and windowing coordinate spaces natively across all four port languages.
