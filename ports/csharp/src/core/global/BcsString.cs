@@ -15,7 +15,11 @@ namespace BCS.Core.Global {
         public string ToLower() {
             return _value.ToLowerInvariant();
         }
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> origin/master
         public override string ToString() {
             return _value;
         }

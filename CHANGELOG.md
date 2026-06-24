@@ -109,3 +109,8 @@
 - modernized multiple Script string/value conversion sites around current `UString`, `jsNumber`, `jsString`, and `constructDate` contracts
 - contracted major `qscriptdeclarativeclass.cpp` drift and propagated low-risk `QString`/identifier fixes into nearby Script bridge/API files
 - revalidated the direct `CsScript` MSVC build probe and documented the newly exposed bridge-header / linkage blocker frontier
+
+## 0.3.0
+- **PORTING (Phase 1-9)**: Executed a massive architectural translation of `BCS::Core` and `BCS::Network` primitives into Go, Rust, C#, and Java.
+- **SYNC**: Upstream synchronization from `master` mapped into `main`, tracking the legacy rename dependencies and submodules correctly.
+- **BUILD**: Incremented global version to 0.3.0 representing the completion of the multi-language port infrastructure.
