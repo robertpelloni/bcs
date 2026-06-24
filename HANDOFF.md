@@ -455,3 +455,8 @@
 * **Action**: Ported advanced `core/global/` headers bridging C++ semantics to memory-safe modern languages.
 * **Pointers**: Implemented `BcsSharedPointer` and `BcsUniquePointer` in Go (Native/GC), Rust (Arc/Box), C# (GC/IDisposable), and Java (GC/AutoCloseable).
 * **Signals**: Transformed `BcsSignal` and the Slot paradigm into language-native event dispatchers (Go Channels/Mutex, Rust Arc/Mutex, C# Action delegates, Java Consumer/CopyOnWriteArrayList).
+
+## Session Summary: Multi-Language Port Initialization Phase 3
+* **Action**: Ported foundational generic `core/containers/` to Go, Rust, C#, and Java.
+* **Vector**: Translated dynamically resizing arrays to `[]T` in Go, `Vec<T>` in Rust, `List<T>` in C#, and `ArrayList<T>` in Java, standardizing the `Append`, `At`, `Size`, and `Clear` interfaces.
+* **Map**: Translated thread-safe hash maps leveraging `sync.RWMutex` + `map` in Go, `Arc<RwLock<HashMap>>` in Rust, `ConcurrentDictionary` in C#, and `ConcurrentHashMap` in Java to implement `Insert`, `Value`, and `Contains` semantics.
