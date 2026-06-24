@@ -479,3 +479,13 @@
 ## Session Summary: Multi-Language Port Initialization Phase 7
 * **Action**: Transitioned from Core definitions to Network scaffolding by porting the `network/socket` subsystem.
 * **TcpSocket**: Recreated the client-side TCP connection abstraction (`BcsTcpSocket`) unifying `ConnectToHost`, `Write`, `ReadLine`, and `Disconnect` behaviors into Go's `net.Conn`, Rust's `std::net::TcpStream`, C#'s `System.Net.Sockets.TcpClient` (using async/await Task patterns), and Java's `java.net.Socket`.
+
+## Session Summary: Multi-Language Port Initialization Phase 8
+* **Action**: Finished the foundational Network Socket module mappings for `BcsTcpServer`.
+* **TcpServer**: Transcribed the server connection handling mechanisms (`Listen`, `Accept`, `Close`).
+* **Implementation Mapping**: Mapped to Go's `net.Listen`, Rust's `TcpListener`, C#'s `TcpListener` (Task-based asynchronous accept), and Java's `ServerSocket`.
+
+## Session Summary: Multi-Language Port Initialization Phase 9
+* **Action**: Established the foundational `core/kernel` subsystem architecture for cross-language event dispatch.
+* **Event Loop**: Implemented the base `BcsEventLoop` mechanism mapping to channels in Go, `mpsc` in Rust, `BlockingCollection` in C#, and `LinkedBlockingQueue` in Java.
+* **Core Object**: Outlined the `BcsObject` parent/child inheritance logic necessary for standard component event routing.
