@@ -114,3 +114,6 @@
 - **PORTING (Phase 1-9)**: Executed a massive architectural translation of `BCS::Core` and `BCS::Network` primitives into Go, Rust, C#, and Java.
 - **SYNC**: Upstream synchronization from `master` mapped into `main`, tracking the legacy rename dependencies and submodules correctly.
 - **BUILD**: Incremented global version to 0.3.0 representing the completion of the multi-language port infrastructure.
+
+## 0.3.1
+- **PORTING (Go Functional Layer)**: Transitioned from semantic scaffolding to active functional porting. Integrated `BcsInputArbitrator` natively into Go utilizing `BcsSignal` capabilities for multi-user focus tracking.
