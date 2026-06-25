@@ -117,3 +117,6 @@
 
 ## 0.3.1
 - **PORTING (Go Functional Layer)**: Transitioned from semantic scaffolding to active functional porting. Integrated `BcsInputArbitrator` natively into Go utilizing `BcsSignal` capabilities for multi-user focus tracking.
+
+## 0.3.2
+- **PORTING (Core Stream & String Utils)**: Added functional operations to `BcsString` (Length, Substr, etc) and fully ported `BcsTextStream` file/IO reading abstraction to Go, Rust, Java, and C#.
