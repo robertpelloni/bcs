@@ -126,3 +126,6 @@
 
 ## 0.3.4
 - **PORTING (Core File System)**: Merged Executive Protocol changes finalizing `bcstextstream.h` functionally across Go, Rust, Java, and C# environments to provide uniform file I/O utilities backing `BcsString`.
+
+## 0.3.5
+- **PORTING (Core GUI Kernel)**: Concluded functional port mapping for `BcsInputArbitrator` by successfully translating concurrent, multi-user focus stream logic into Rust, Java, and C# complementing the existing Go implementation.

@@ -539,3 +539,7 @@
 ## Session Summary: Foundational Semantics Expansion (Alignment & Orientation)
 * **Context Shift**: Obeying constraints to refine the semantic mapping layer before proceeding to higher-level functional rewrites.
 * **Component**: Expanded `bcscoretypes.h` implementation. Mapped `BcsAlignment` (bitwise layout flags) and `BcsOrientation` (linear bounds definitions) natively into Go (`iota` logic), Rust (`bitflags`), C# (`[Flags]`), and Java (`static final int` & `enum`) to ensure correct parsing by the underlying window manager.
+
+## Session Summary: Functional Porting Phase (Input Arbitrator)
+* **Action**: Fully ported the initial functional module leveraging our multi-language semantic primitives across the board.
+* **Component**: Implemented `BcsInputArbitrator` natively into Rust (RwLock/HashMap), C# (ConcurrentDictionary), and Java (ConcurrentHashMap), extending the initial Go implementation. This securely roots the Bcs framework's flagship feature (multi-user GUI routing) into the ported execution pipelines.
