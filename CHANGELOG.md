@@ -123,3 +123,6 @@
 
 ## 0.3.3
 - **PORTING (Core Semantic Expansions)**: Fully satisfied foundational mapping directives by augmenting `BcsAlignment` and `BcsOrientation` across all language targets (`bcscoretypes.h` equivalent). Prepared structures for functional layout bindings.
+
+## 0.3.4
+- **PORTING (Core File System)**: Merged Executive Protocol changes finalizing `bcstextstream.h` functionally across Go, Rust, Java, and C# environments to provide uniform file I/O utilities backing `BcsString`.
