@@ -129,3 +129,6 @@
 
 ## 0.3.5
 - **PORTING (Core GUI Kernel)**: Concluded functional port mapping for `BcsInputArbitrator` by successfully translating concurrent, multi-user focus stream logic into Rust, Java, and C# complementing the existing Go implementation.
+
+## 0.3.6
+- **PORTING (Go Tooling)**: Validated core semantic string mapping by implementing `BcsCommandLineParser` natively in Go.
