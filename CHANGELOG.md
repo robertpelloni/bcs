@@ -109,3 +109,26 @@
 - modernized multiple Script string/value conversion sites around current `UString`, `jsNumber`, `jsString`, and `constructDate` contracts
 - contracted major `qscriptdeclarativeclass.cpp` drift and propagated low-risk `QString`/identifier fixes into nearby Script bridge/API files
 - revalidated the direct `CsScript` MSVC build probe and documented the newly exposed bridge-header / linkage blocker frontier
+
+## 0.3.0
+- **PORTING (Phase 1-9)**: Executed a massive architectural translation of `BCS::Core` and `BCS::Network` primitives into Go, Rust, C#, and Java.
+- **SYNC**: Upstream synchronization from `master` mapped into `main`, tracking the legacy rename dependencies and submodules correctly.
+- **BUILD**: Incremented global version to 0.3.0 representing the completion of the multi-language port infrastructure.
+
+## 0.3.1
+- **PORTING (Go Functional Layer)**: Transitioned from semantic scaffolding to active functional porting. Integrated `BcsInputArbitrator` natively into Go utilizing `BcsSignal` capabilities for multi-user focus tracking.
+
+## 0.3.2
+- **PORTING (Core Stream & String Utils)**: Added functional operations to `BcsString` (Length, Substr, etc) and fully ported `BcsTextStream` file/IO reading abstraction to Go, Rust, Java, and C#.
+
+## 0.3.3
+- **PORTING (Core Semantic Expansions)**: Fully satisfied foundational mapping directives by augmenting `BcsAlignment` and `BcsOrientation` across all language targets (`bcscoretypes.h` equivalent). Prepared structures for functional layout bindings.
+
+## 0.3.4
+- **PORTING (Core File System)**: Merged Executive Protocol changes finalizing `bcstextstream.h` functionally across Go, Rust, Java, and C# environments to provide uniform file I/O utilities backing `BcsString`.
+
+## 0.3.5
+- **PORTING (Core GUI Kernel)**: Concluded functional port mapping for `BcsInputArbitrator` by successfully translating concurrent, multi-user focus stream logic into Rust, Java, and C# complementing the existing Go implementation.
+
+## 0.3.6
+- **PORTING (Go Tooling)**: Validated core semantic string mapping by implementing `BcsCommandLineParser` natively in Go.
