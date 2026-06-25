@@ -120,3 +120,6 @@
 
 ## 0.3.2
 - **PORTING (Core Stream & String Utils)**: Added functional operations to `BcsString` (Length, Substr, etc) and fully ported `BcsTextStream` file/IO reading abstraction to Go, Rust, Java, and C#.
+
+## 0.3.3
+- **PORTING (Core Semantic Expansions)**: Fully satisfied foundational mapping directives by augmenting `BcsAlignment` and `BcsOrientation` across all language targets (`bcscoretypes.h` equivalent). Prepared structures for functional layout bindings.
