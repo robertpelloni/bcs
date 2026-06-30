@@ -34,5 +34,15 @@ namespace BCS.Core.Tools {
             Width = width;
             Height = height;
         }
+
+        public bool Contains(BcsPoint p) {
+            return p.X >= X && p.X <= X + Width &&
+                   p.Y >= Y && p.Y <= Y + Height;
+        }
+
+        public bool Intersects(BcsRect other) {
+            return X < other.X + other.Width && X + Width > other.X &&
+                   Y < other.Y + other.Height && Y + Height > other.Y;
+        }
     }
 }

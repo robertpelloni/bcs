@@ -10,6 +10,11 @@ type BcsWidget struct {
 	*kernel.BcsObject
 	rect    *tools.BcsRect
 	visible bool
+
+	// Comprehensive UI Representation properties
+	ToolTip     string
+	Description string
+	Label       string
 }
 
 func NewBcsWidget(parent *BcsWidget) *BcsWidget {
@@ -19,9 +24,12 @@ func NewBcsWidget(parent *BcsWidget) *BcsWidget {
 	}
 
 	return &BcsWidget{
-		BcsObject: kernel.NewBcsObject(parentObj),
-		rect:      tools.NewBcsRect(0, 0, 100, 100),
-		visible:   true,
+		BcsObject:   kernel.NewBcsObject(parentObj),
+		rect:        tools.NewBcsRect(0, 0, 100, 100),
+		visible:     true,
+		ToolTip:     "",
+		Description: "",
+		Label:       "",
 	}
 }
 

@@ -9,9 +9,18 @@ public class BcsWidget extends bcs.core.kernel.BcsObject {
     private BcsRect geometry;
     private boolean visible;
 
+    // Comprehensive UI Representation properties
+    public String toolTip;
+    public String description;
+    public String label;
+
     public BcsWidget(BcsWidget parent) {
+        super(parent);
         this.geometry = new BcsRect(0, 0, 100, 100);
         this.visible = true;
+        this.toolTip = "";
+        this.description = "";
+        this.label = "";
     }
 
     public void setGeometry(int x, int y, int width, int height) {

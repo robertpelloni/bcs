@@ -2,23 +2,25 @@ package bcs.core.global;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-// Maps the BCS Signal/Slot system to Java's Consumer event paradigm
 public class BcsSignal<T> {
-    private final List<Consumer<T>> listeners = new CopyOnWriteArrayList<>();
+    private final List<Consumer<T>> listeners;
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
 
-    public void connect(Consumer<T> listener) {
-        listeners.add(listener);
+    public BcsSignal() {
+        this.listeners = new CopyOnWriteArrayList<>();
     }
 
-    public void disconnect(Consumer<T> listener) {
-        listeners.remove(listener);
+    public void connect(Consumer<T> callback) {
+        this.listeners.add(callback);
     }
 
     public void emit(T payload) {
-        for (Consumer<T> listener : listeners) {
-            listener.accept(payload);
+        for (Consumer<T> listener : this.listeners) {
+            executor.submit(() -> listener.accept(payload));
         }
     }
 }

@@ -19,7 +19,6 @@ public class BcsString {
     public String toString() {
         return this.value;
     }
-}
 
     public int length() {
         return this.value.length();
@@ -38,4 +37,4 @@ public class BcsString {
     public byte[] toUtf8() {
         return this.value.getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
-// NOTE: Appended manually, formatting will be rough but functionally valid
+}

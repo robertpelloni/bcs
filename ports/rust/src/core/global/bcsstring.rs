@@ -15,6 +15,12 @@ impl BcsStringWrapper {
     }
 }
 
+impl std::fmt::Display for BcsStringWrapper {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
 impl BcsStringWrapper {
     pub fn length(&self) -> usize {
         self.0.len()

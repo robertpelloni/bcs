@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
-use bcs_core::global::bcssignal::BcsSignal;
-use super::super::super::core::kernel::bcs_event::BcsObject; // Adjust relative path based on crate structure conceptually
+use std::rc::Rc;
+use std::cell::RefCell;
+use crate::core::global::bcssignal::BcsSignal;
+use crate::core::kernel::bcs_event::BcsObject;
 
 // BcsInputOwner maps the conceptual multi-user network ID to an input source
 #[derive(Clone)]
@@ -25,6 +27,12 @@ pub struct BcsInputArbitrator {
     pub focus_changed: BcsSignal<BcsInputOwner>,
 }
 
+impl Default for BcsInputArbitrator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl BcsInputArbitrator {
     pub fn new() -> Self {
         BcsInputArbitrator {
@@ -40,7 +48,7 @@ impl BcsInputArbitrator {
     }
 
     // RequestFocus attempts to route the target focus token to the specified owner
-    pub fn request_focus(&self, owner_id: &str, target_widget: Option<&dyn BcsObject>) -> bool {
+    pub fn request_focus(&self, owner_id: &str, target_widget: Option<&Rc<RefCell<BcsObject>>>) -> bool {
         let map = self.active_owners.read().unwrap();
         let owner = map.get(owner_id);
 
@@ -49,7 +57,7 @@ impl BcsInputArbitrator {
         }
 
         // Emit signal broadcasting focus shift logic
-        self.focus_changed.emit(owner.unwrap());
+        self.focus_changed.emit_async(owner.unwrap().clone());
         true
     }
 }

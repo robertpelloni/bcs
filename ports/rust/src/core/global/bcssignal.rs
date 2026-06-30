@@ -1,11 +1,11 @@
 use std::sync::{Arc, Mutex};
+use std::thread;
 
-// BcsSignal implements the event dispatcher/observer pattern for Rust
-pub struct BcsSignal<T> {
+pub struct BcsSignal<T: Clone + Send + 'static> {
     listeners: Arc<Mutex<Vec<Box<dyn Fn(&T) + Send + Sync>>>>,
 }
 
-impl<T> BcsSignal<T> {
+impl<T: Clone + Send + 'static> BcsSignal<T> {
     pub fn new() -> Self {
         BcsSignal {
             listeners: Arc::new(Mutex::new(Vec::new())),
@@ -25,5 +25,15 @@ impl<T> BcsSignal<T> {
         for listener in listeners.iter() {
             listener(payload);
         }
+    }
+
+    pub fn emit_async(&self, payload: T) {
+        let listeners = Arc::clone(&self.listeners);
+        thread::spawn(move || {
+            let listeners = listeners.lock().unwrap();
+            for listener in listeners.iter() {
+                listener(&payload);
+            }
+        });
     }
 }

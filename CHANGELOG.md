@@ -132,3 +132,26 @@
 
 ## 0.3.6
 - **PORTING (Go Tooling)**: Validated core semantic string mapping by implementing `BcsCommandLineParser` natively in Go.
+
+## 0.3.7
+- **PORTING (Tooling & String Utilities)**: Fixed structural errors in Java and C# `BcsString` ports.
+- **PORTING (Tooling)**: Implemented `BcsCommandLineParser` natively in C#, Java, and Rust, mapping functionality from the Go reference port.
+- **PORTING (Core Kernel)**: Implemented `BcsObject` and `BcsEventLoop` natively in C#, Java, and Rust based on the Go reference port.
+
+## 0.3.8
+- **PORTING (Gui Kernel)**: Updated `BcsApplication` natively in C#, Java, and Rust to explicitly utilize the newly ported `BcsEventLoop` for lifecycle execution.
+
+## 0.3.9
+- **PORTING (Core Kernel)**: Implemented priority-based event dispatching natively in Go, Rust, C#, and Java using respective heap/priority queue structures in `BcsEventLoop`.
+- **PORTING (Core Global)**: Implemented async `BcsSignal` capabilities via thread pools and asynchronous contexts across C#, Java, and Rust.
+- **PORTING (Gui Widgets)**: Integrated updated `BcsEvent` systems into `BcsWidget` base classes across all target languages.
+
+## 0.3.10
+- **PORTING (Gui Kernel)**: Mapped `BcsApplication` completely into Go, Rust, Java, and C# extending `BcsObject` and bootstrapping the `BcsEventLoop` to manage primary application lifecycles.
+
+## 0.3.11
+- **PORTING (Gui Widgets)**: Updated `BcsWidget` foundational classes across C#, Java, Go, and Rust with `Tooltip`, `Description`, and `Label` properties to satisfy UI integration compliance rules.
+
+## 0.3.12
+- **PORTING (Core Tools)**: Mapped `BcsGeometry` types (`BcsPoint`, `BcsSize`, `BcsRect`) completely into Go, Rust, Java, and C# including containment logic to build toward frontend rendering parity.
+- **PORTING (Core Tools)**: Mapped `BcsVariant` dynamic type erasure containers completely into Go, Rust, Java, and C# natively to enable dynamic property tracking.
