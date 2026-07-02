@@ -1,17 +1,27 @@
-use bcs_core::kernel::bcs_event::{BcsEvent, BcsObject};
-use bcs_core::tools::bcsgeometry::BcsRect;
+use std::rc::Rc;
+use std::cell::RefCell;
+use crate::core::kernel::bcs_event::{BcsEvent, BcsObject};
+use crate::core::tools::bcsgeometry::BcsRect;
 
 // BcsWidget is the base class for all UI elements
 pub struct BcsWidget {
+    pub base: Rc<RefCell<BcsObject>>,
     rect: BcsRect,
     visible: bool,
+    pub tooltip: String,
+    pub description: String,
+    pub label: String,
 }
 
 impl BcsWidget {
-    pub fn new() -> Self {
+    pub fn new(parent: Option<Rc<RefCell<BcsObject>>>) -> Self {
         BcsWidget {
+            base: BcsObject::new(parent),
             rect: BcsRect::new(0, 0, 100, 100),
             visible: true,
+            tooltip: String::new(),
+            description: String::new(),
+            label: String::new(),
         }
     }
 
@@ -30,12 +40,8 @@ impl BcsWidget {
     pub fn hide(&mut self) {
         self.visible = false;
     }
-}
 
-// Implement BcsObject for BcsWidget event propagation
-impl BcsObject for BcsWidget {
-    fn event(&mut self, _e: &BcsEvent) -> bool {
-        // Handle UI specific events
-        false
+    pub fn handle_event(&self, e: &BcsEvent) -> bool {
+        self.base.borrow().handle_event(e)
     }
 }

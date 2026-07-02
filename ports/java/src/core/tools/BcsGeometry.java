@@ -37,5 +37,15 @@ public class BcsGeometry {
             this.width = width;
             this.height = height;
         }
+
+        public boolean contains(BcsPoint p) {
+            return p.x >= this.x && p.x <= this.x + this.width &&
+                   p.y >= this.y && p.y <= this.y + this.height;
+        }
+
+        public boolean intersects(BcsRect other) {
+            return this.x < other.x + other.width && this.x + this.width > other.x &&
+                   this.y < other.y + other.height && this.y + this.height > other.y;
+        }
     }
 }

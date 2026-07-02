@@ -31,3 +31,13 @@ type BcsRect struct {
 func NewBcsRect(x, y, w, h int) *BcsRect {
 	return &BcsRect{X: x, Y: y, Width: w, Height: h}
 }
+
+func (r *BcsRect) Contains(p *BcsPoint) bool {
+	return p.X >= r.X && p.X <= r.X+r.Width &&
+		p.Y >= r.Y && p.Y <= r.Y+r.Height
+}
+
+func (r *BcsRect) Intersects(other *BcsRect) bool {
+	return r.X < other.X+other.Width && r.X+r.Width > other.X &&
+		r.Y < other.Y+other.Height && r.Y+r.Height > other.Y
+}

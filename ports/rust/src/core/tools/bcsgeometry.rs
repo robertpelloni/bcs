@@ -37,4 +37,14 @@ impl BcsRect {
     pub fn new(x: i32, y: i32, width: i32, height: i32) -> Self {
         BcsRect { x, y, width, height }
     }
+
+    pub fn contains(&self, p: &BcsPoint) -> bool {
+        p.x >= self.x && p.x <= self.x + self.width &&
+        p.y >= self.y && p.y <= self.y + self.height
+    }
+
+    pub fn intersects(&self, other: &BcsRect) -> bool {
+        self.x < other.x + other.width && self.x + self.width > other.x &&
+        self.y < other.y + other.height && self.y + self.height > other.y
+    }
 }
