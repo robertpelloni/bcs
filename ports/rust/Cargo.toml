@@ -1,0 +1,6 @@
+[package]
+name = "bcs"
+version = "0.3.22"
+edition = "2021"
+
+[dependencies]

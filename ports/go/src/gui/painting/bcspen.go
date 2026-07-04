@@ -1,6 +1,6 @@
 package painting
 
-import "bcs/core/global"
+import "github.com/robertpelloni/bcs/ports/go/core/global"
 
 // BcsPen defines how lines and outlines are drawn
 type BcsPen struct {

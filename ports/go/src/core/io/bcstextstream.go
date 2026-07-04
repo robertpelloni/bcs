@@ -1,10 +1,10 @@
 package io
 
 import (
-	"bcs/core/global"
+	"github.com/robertpelloni/bcs/ports/go/core/global"
 	"bufio"
 	"io"
-	"os"
+
 )
 
 // BcsTextStream provides a convenient interface for reading and writing text.

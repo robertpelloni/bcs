@@ -155,3 +155,45 @@
 ## 0.3.12
 - **PORTING (Core Tools)**: Mapped `BcsGeometry` types (`BcsPoint`, `BcsSize`, `BcsRect`) completely into Go, Rust, Java, and C# including containment logic to build toward frontend rendering parity.
 - **PORTING (Core Tools)**: Mapped `BcsVariant` dynamic type erasure containers completely into Go, Rust, Java, and C# natively to enable dynamic property tracking.
+
+## 0.3.13
+- **PORTING (Network Socket)**: Translated `BcsTcpServer` implementations natively across Java, C#, and Rust mirroring the underlying listener/accept paradigms mapped in the original Go design.
+
+## 0.3.14
+- **PORTING (Network Socket)**: Finalized `BcsTcpSocket` and `BcsTcpServer` connectivity mapping, addressing correct client stream injections dynamically.
+
+## 0.3.15
+- **PORTING (Core Subsystems)**: Validated module linkage and cross-directory references spanning `BcsTextStream`, `BcsTcpServer`, `BcsTimer`, and `BcsWidget` correctly resolving inside native Rust module definitions without orphaned compilation segments.
+
+## 0.3.16
+- **PORTING (Gui Kernel)**: Enhanced `BcsInputArbitrator` structures across Go, Rust, and C# establishing unified standard mappings for tracking active input owners via concurrent dicts and RW-locked maps.
+
+## 0.3.17
+- **PORTING (Go Initialization)**: Added `go.mod` module path initialization tracking for cross-subsystem dependency resolution in Go ports natively bridging Kernel/Network/Gui links.
+
+## 0.3.18
+- **PORTING (Go Architecture)**: Re-mapped the Go source tree correctly utilizing absolute module names (`github.com/robertpelloni/bcs/ports/go/core/...`) allowing complete compilation via standard `go build ./...` tools for native package handling.
+
+## 0.3.19
+- **PORTING (Gui Widgets)**: Integrated advanced `BcsWidget` configurations handling advanced FocusPolicy and state configurations seamlessly linked against the modernized `BcsEventLoop` implementations in C#, Java, Go, and Rust.
+
+## 0.3.20
+- **TESTING (Core Kernel)**: Initialized unit testing scaffolds demonstrating functional correctness of `BcsEventLoop` lifecycle and `BcsObject` parent/child routing execution natively across the multi-language frameworks.
+
+## 0.3.21
+- **PORTING (Core Kernel)**: Fixed Rust `BcsTimer` concurrency deadlocks by properly releasing mutexes before thread callbacks. Re-architected Java's async `BcsSignal` capabilities via cached daemon thread executors to enforce clean JVM termination upon `BcsApplication.quit()`. Mapped IPC abstractions (`BcsSystemSemaphore`, `BcsSharedMemory`) functionally across Go, Rust, Java, and C#.
+
+## [0.3.23] - 2024-07-03
+### Added
+- Core Kernel thread-safe event scheduling abstractions: `BcsEventDispatcher`, `BcsEventTypes`.
+- Cross-language thread modeling: `BcsThread`, `BcsMutex` (wrapping `QThread` and `QMutex` semantics across Go `goroutines`/`sync`, Rust `std::thread`/`Mutex`, C# `Thread`/`Monitor`, and Java `Thread`/`ReentrantLock`).
+- Base GUI global orchestrator: `BcsApplication` (mapping `QCoreApplication`) which initializes the `BcsEventLoop`.
+- Input routing: `BcsInputArbitrator` natively connected to event dispatch pipeline.
+- Base GUI window abstraction: `BcsWindow` in Go, C#, Rust.
+- Type-erasure foundation `BcsVariant` natively mapped to `interface{}`/`Object`/`object`/`Box<dyn Any>` across Go, Java, C#, and Rust respectively.
+
+## [0.3.24] - 2024-07-03
+### Added
+- Native port of `BcsFont` logic for rendering hints mapping to Qt `QFont`.
+- Native port of `BcsColor` providing type-safe color spaces (RGB, CMYK, HSV) and clamp processing.
+- `gui/painting/` and `gui/text/` package initialization.

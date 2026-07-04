@@ -1,4 +1,4 @@
-use bcs_core::global::bcsstring::BcsStringWrapper;
+use crate::core::global::bcsstring::BcsStringWrapper;
 use std::fs::File;
 use std::io::{self, BufRead, BufReader, Write};
 

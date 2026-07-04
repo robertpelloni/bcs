@@ -3,7 +3,13 @@ use std::net::TcpStream;
 
 // BcsTcpSocket abstracts a network client connection for Rust
 pub struct BcsTcpSocket {
-    stream: Option<TcpStream>,
+    pub stream: Option<TcpStream>,
+}
+
+impl Default for BcsTcpSocket {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl BcsTcpSocket {

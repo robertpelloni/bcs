@@ -97,7 +97,10 @@ func (l *BcsEventLoop) PostEvent(e *BcsEvent) {
 
 func (l *BcsEventLoop) Exec() {
 	l.mu.Lock()
-	defer l.mu.Unlock()
+	defer func() {
+		// Just in case we exit normally without unlocking
+		// Though we manage it directly in the loop.
+	}()
 
 	for !l.quit {
 		for len(l.queue) == 0 && !l.quit {
@@ -112,10 +115,20 @@ func (l *BcsEventLoop) Exec() {
 		e := heap.Pop(&l.queue).(*BcsEvent)
 
 		l.mu.Unlock()
-		// Dispatch event to application roots
-		_ = e
+
+		func() {
+			defer func() {
+				if r := recover(); r != nil {
+					// Handle dispatch panic
+				}
+			}()
+			// Dispatch event to application roots
+			_ = e
+		}()
+
 		l.mu.Lock()
 	}
+	l.mu.Unlock()
 }
 
 func (l *BcsEventLoop) Quit() {

@@ -8,7 +8,11 @@ import java.util.function.Consumer;
 
 public class BcsSignal<T> {
     private final List<Consumer<T>> listeners;
-    private static final ExecutorService executor = Executors.newCachedThreadPool();
+    private static final ExecutorService executor = Executors.newCachedThreadPool(r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        return t;
+    });
 
     public BcsSignal() {
         this.listeners = new CopyOnWriteArrayList<>();

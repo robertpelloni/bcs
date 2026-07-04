@@ -1,9 +1,17 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using BCS.Core.Global;
 using BCS.Core.Kernel;
 
 namespace BCS.Gui.Kernel {
-    // BcsInputOwner maps the conceptual multi-user network ID to an input source
+    public enum FocusScope {
+        Widget, Window, Application, Workspace, Global
+    }
+
+    public enum ModalityPolicy {
+        Shared, OwnerExclusive, WindowExclusive, ApplicationExclusive, SystemExclusive
+    }
+
     public class BcsInputOwner {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -14,28 +22,111 @@ namespace BCS.Gui.Kernel {
         }
     }
 
-    // BcsInputArbitrator handles multi-user event streams and focus delegation natively
+    public class BcsFocusToken {
+        public string TokenId { get; set; }
+        public string OwnerId { get; set; }
+        public string SurfaceId { get; set; }
+        public FocusScope Scope { get; set; }
+        public ModalityPolicy ModalityPolicy { get; set; }
+        public int Priority { get; set; }
+        public bool Active { get; set; }
+
+        public BcsFocusToken(string tokenId, string ownerId, string surfaceId) {
+            TokenId = tokenId;
+            OwnerId = ownerId;
+            SurfaceId = surfaceId;
+            Scope = FocusScope.Widget;
+            ModalityPolicy = ModalityPolicy.Shared;
+            Priority = 0;
+            Active = true;
+        }
+    }
+
+    public enum RouteDecision { Reject, Share, Transfer, Queue }
+
+    public class BcsInputRouteRequest {
+        public string OwnerId { get; set; }
+        public string SurfaceId { get; set; }
+        public string DeviceId { get; set; }
+        public int Kind { get; set; }
+    }
+
+    public class BcsInputRouteResult {
+        public RouteDecision Decision { get; set; } = RouteDecision.Share;
+        public string ResolvedOwnerId { get; set; }
+        public string BlockingOwnerId { get; set; }
+        public string BlockingSurfaceId { get; set; }
+
+        public bool Accepted() {
+            return Decision != RouteDecision.Reject;
+        }
+    }
+
     public class BcsInputArbitrator {
         private ConcurrentDictionary<string, BcsInputOwner> _activeOwners;
+        private List<BcsFocusToken> _focusTokens;
+        private readonly object _lock = new object();
         public BcsSignal<BcsInputOwner> FocusChanged { get; private set; }
 
         public BcsInputArbitrator() {
             _activeOwners = new ConcurrentDictionary<string, BcsInputOwner>();
+            _focusTokens = new List<BcsFocusToken>();
             FocusChanged = new BcsSignal<BcsInputOwner>();
         }
 
-        // RegisterOwner adds a new network or local user to the arbitrator's pool
         public void RegisterOwner(BcsInputOwner owner) {
             _activeOwners[owner.Id] = owner;
         }
 
-        // RequestFocus attempts to route the target focus token to the specified owner
+        public void AddFocusToken(BcsFocusToken token) {
+            lock (_lock) {
+                _focusTokens.Add(token);
+            }
+        }
+
+        private BcsFocusToken HighestPriorityActiveToken() {
+            BcsFocusToken highest = null;
+            lock (_lock) {
+                foreach (var token in _focusTokens) {
+                    if (token.Active) {
+                        if (highest == null || token.Priority > highest.Priority) {
+                            highest = token;
+                        }
+                    }
+                }
+            }
+            return highest;
+        }
+
+        public bool WouldBlock(string ownerId, string surfaceId) {
+            var highest = HighestPriorityActiveToken();
+            if (highest != null) {
+                if (highest.ModalityPolicy != ModalityPolicy.Shared && highest.OwnerId != ownerId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public BcsInputRouteResult Route(BcsInputRouteRequest request) {
+            var result = new BcsInputRouteResult();
+            var highest = HighestPriorityActiveToken();
+
+            if (highest != null) {
+                if (highest.ModalityPolicy != ModalityPolicy.Shared && highest.OwnerId != request.OwnerId) {
+                    result.Decision = RouteDecision.Reject;
+                    result.BlockingOwnerId = highest.OwnerId;
+                    result.BlockingSurfaceId = highest.SurfaceId;
+                }
+            }
+            return result;
+        }
+
         public bool RequestFocus(string ownerId, BcsObject targetWidget) {
             if (!_activeOwners.TryGetValue(ownerId, out var owner) || targetWidget == null) {
                 return false;
             }
 
-            // Emit signal broadcasting focus shift logic
             FocusChanged.Emit(owner);
             return true;
         }

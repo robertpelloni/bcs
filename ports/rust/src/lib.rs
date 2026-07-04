@@ -9,6 +9,12 @@ pub mod core {
     }
     pub mod kernel {
         pub mod bcs_event;
+        pub mod bcstimer;
+    }
+    pub mod io {
+        pub mod bcsdir;
+        pub mod bcsfile;
+        pub mod bcstextstream;
     }
 }
 pub mod gui {
@@ -18,5 +24,11 @@ pub mod gui {
     }
     pub mod widgets {
         pub mod bcswidget;
+    }
+}
+pub mod network {
+    pub mod socket {
+        pub mod bcstcpserver;
+        pub mod bcstcpsocket;
     }
 }

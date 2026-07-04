@@ -1,6 +1,6 @@
 package layout
 
-import "bcs/gui/widgets"
+import "github.com/robertpelloni/bcs/ports/go/gui/widgets"
 
 // BcsLayout governs spatial organization of UI components
 type BcsLayout struct {

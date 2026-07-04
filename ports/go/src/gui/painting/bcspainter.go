@@ -1,7 +1,7 @@
 package painting
 
 import (
-	"bcs/core/tools"
+	"github.com/robertpelloni/bcs/ports/go/core/tools"
 )
 
 // BcsPainter abstracts native hardware-accelerated and software drawing ops
