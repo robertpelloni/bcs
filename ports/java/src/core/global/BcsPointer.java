@@ -2,11 +2,6 @@ package bcs.core.global;
 
 // Java uses GC, so these are semantic wrappers mapping the C++ ownership concepts.
 public class BcsPointer {
-<<<<<<< HEAD
-
-=======
-
->>>>>>> origin/master
     public static class BcsSharedPointer<T> {
         private T value;
 

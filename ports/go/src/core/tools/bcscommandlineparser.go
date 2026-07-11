@@ -1,7 +1,7 @@
 package tools
 
 import (
-	"bcs/core/global"
+	"github.com/robertpelloni/bcs/ports/go/core/global"
 	"fmt"
 	"os"
 )

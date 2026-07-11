@@ -16,7 +16,7 @@ namespace BCS.Network.Socket {
         public async Task<BcsTcpSocket> AcceptAsync() {
             var client = await _listener.AcceptTcpClientAsync();
             var socket = new BcsTcpSocket();
-            // In a real port, BcsTcpSocket would accept an existing TcpClient via constructor
+            socket.SetClient(client);
             return socket;
         }
 

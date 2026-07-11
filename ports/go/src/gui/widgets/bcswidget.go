@@ -1,8 +1,8 @@
 package widgets
 
 import (
-	"bcs/core/kernel"
-	"bcs/core/tools"
+	"github.com/robertpelloni/bcs/ports/go/core/kernel"
+	"github.com/robertpelloni/bcs/ports/go/core/tools"
 )
 
 // BcsWidget is the base class for all UI elements

@@ -1,5 +1,5 @@
 use std::io;
-use std::net::{TcpListener, TcpStream};
+use std::net::TcpListener;
 use super::bcstcpsocket::BcsTcpSocket;
 
 // BcsTcpServer abstracts a network listener socket for Rust
@@ -23,10 +23,8 @@ impl BcsTcpServer {
         if let Some(ref listener) = self.listener {
             let (stream, _) = listener.accept()?;
             let mut socket = BcsTcpSocket::new();
-            // Note: Since bcstcpsocket abstracts the stream as Option<TcpStream>,
-            // we'd need to expose a method to set it, or construct it here directly.
-            // Assuming for porting mapping purposes we inject it.
-            Ok(socket) // Placeholder for internal stream injection
+            socket.stream = Some(stream);
+            Ok(socket)
         } else {
             Err(io::Error::new(io::ErrorKind::NotConnected, "Server not listening"))
         }

@@ -12,10 +12,17 @@ public class BcsTcpSocket {
     private PrintWriter out;
     private BufferedReader in;
 
+    public BcsTcpSocket() {
+    }
+
+    protected void setSocket(Socket clientSocket) throws IOException {
+        this.socket = clientSocket;
+        this.out = new PrintWriter(socket.getOutputStream(), true);
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    }
+
     public void connectToHost(String host, int port) throws IOException {
-        socket = new Socket(host, port);
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        setSocket(new Socket(host, port));
     }
 
     public void write(String data) {

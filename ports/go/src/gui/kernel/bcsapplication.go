@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"bcs/core/kernel"
+	"github.com/robertpelloni/bcs/ports/go/core/kernel"
 	"fmt"
 )
 

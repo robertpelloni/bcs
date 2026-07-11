@@ -15,11 +15,16 @@ namespace BCS.Network.Socket {
             _client = new TcpClient();
         }
 
-        public async Task ConnectToHostAsync(string host, int port) {
-            await _client.ConnectAsync(host, port);
+        internal void SetClient(TcpClient client) {
+            _client = client;
             _stream = _client.GetStream();
             _reader = new StreamReader(_stream);
             _writer = new StreamWriter(_stream) { AutoFlush = true };
+        }
+
+        public async Task ConnectToHostAsync(string host, int port) {
+            await _client.ConnectAsync(host, port);
+            SetClient(_client);
         }
 
         public async Task WriteAsync(string data) {

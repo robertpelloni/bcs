@@ -17,7 +17,7 @@ public class BcsCoreTypes {
     public static void critical(String msg) {
         System.out.println("[BCS Critical] " + msg);
     }
-}
+
     // BcsAlignment mapping (using int constants since Java Enums don't support bitwise easily)
     public static final int ALIGN_LEFT = 0x0001;
     public static final int ALIGN_RIGHT = 0x0002;

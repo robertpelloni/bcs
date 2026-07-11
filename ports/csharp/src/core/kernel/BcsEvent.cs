@@ -66,7 +66,8 @@ namespace BCS.Core.Kernel {
         }
 
         public void Exec() {
-            lock (_lock) {
+            System.Threading.Monitor.Enter(_lock);
+            try {
                 while (!_quit) {
                     while (_queue.Count == 0 && !_quit) {
                         System.Threading.Monitor.Wait(_lock);
@@ -77,8 +78,17 @@ namespace BCS.Core.Kernel {
                     BcsEvent e = _queue.Dequeue();
 
                     System.Threading.Monitor.Exit(_lock);
-                    // Dispatch event
-                    System.Threading.Monitor.Enter(_lock);
+                    try {
+                        // Dispatch event
+                    } catch (Exception) {
+                        // Handle dispatch exception
+                    } finally {
+                        System.Threading.Monitor.Enter(_lock);
+                    }
+                }
+            } finally {
+                if (System.Threading.Monitor.IsEntered(_lock)) {
+                    System.Threading.Monitor.Exit(_lock);
                 }
             }
         }

@@ -16,7 +16,7 @@ public class BcsTcpServer {
         if (serverSocket != null) {
             Socket clientSocket = serverSocket.accept();
             BcsTcpSocket socket = new BcsTcpSocket();
-            // Internal logic would set the underlying java.net.Socket
+            socket.setSocket(clientSocket);
             return socket;
         }
         return null;

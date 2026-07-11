@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"bcs/core/tools"
+	"github.com/robertpelloni/bcs/ports/go/core/tools"
 )
 
 // BcsWindow represents a top-level native window
