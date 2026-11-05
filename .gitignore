@@ -14,3 +14,9 @@
 
 /build-*/
 build/
+
+# Build artifacts
+.build_success
+build_output/
+target/
+*.log
