@@ -13,28 +13,4 @@
 /utilities/unicode/read_me.txt
 
 /build-*/
-/ports/rust/target/
-
-# Cargo
-ports/rust/target/
-ports/rust/Cargo.lock
-
-# Go
-ports/go/bin/
-ports/go/pkg/
-
-# Java
-ports/java/target/
-ports/java/**/*.class
-
-# C#
-ports/csharp/bin/
-ports/csharp/obj/
-
-# Output sizes
-*~
-*.swp
-*.swo
-
-# Java compiled files
-**/*.class
+build/

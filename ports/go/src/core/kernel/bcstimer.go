@@ -5,27 +5,17 @@ import (
 	"time"
 )
 
+// BcsTimer provides a cross-platform high-level timer mapping to C++ QTimer natively using goroutines
 type BcsTimer struct {
 	*BcsObject
 	interval     time.Duration
 	singleShot   bool
-	isActive     bool
-	ticker       *time.Ticker
+	active       bool
 	timer        *time.Timer
-	stopChan     chan struct{}
+	ticker       *time.Ticker
+	quit         chan struct{}
 	mu           sync.Mutex
-	timerId      int
-	timeoutFunc  func()
-}
-
-var globalTimerIdCounter int
-var timerIdMu sync.Mutex
-
-func getNextTimerId() int {
-	timerIdMu.Lock()
-	defer timerIdMu.Unlock()
-	globalTimerIdCounter++
-	return globalTimerIdCounter
+	TimeoutEvent func() // Simple native callback hook
 }
 
 func NewBcsTimer(parent *BcsObject) *BcsTimer {
@@ -33,8 +23,8 @@ func NewBcsTimer(parent *BcsObject) *BcsTimer {
 		BcsObject:  NewBcsObject(parent),
 		interval:   0,
 		singleShot: false,
-		isActive:   false,
-		timerId:    getNextTimerId(),
+		active:     false,
+		quit:       make(chan struct{}),
 	}
 }
 
@@ -50,120 +40,62 @@ func (t *BcsTimer) SetSingleShot(singleShot bool) {
 	t.singleShot = singleShot
 }
 
-func (t *BcsTimer) IsActive() bool {
+func (t *BcsTimer) Start() {
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	return t.isActive
-}
 
-func (t *BcsTimer) ConnectTimeout(f func()) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-	t.timeoutFunc = f
-}
-
-func (t *BcsTimer) Start(msec int) {
-	if msec > 0 {
-		t.SetInterval(msec)
+	if t.active {
+		return
 	}
+	t.active = true
+	t.quit = make(chan struct{})
 
-	t.mu.Lock()
-	if t.isActive {
-		t.mu.Unlock()
-		t.Stop()
-		t.mu.Lock()
-	}
-
-	t.isActive = true
-	t.stopChan = make(chan struct{})
-	t.mu.Unlock()
-
-	go t.runLoop()
+	go func() {
+		if t.singleShot {
+			t.timer = time.NewTimer(t.interval)
+			select {
+			case <-t.timer.C:
+				if t.TimeoutEvent != nil {
+					t.TimeoutEvent()
+				}
+				t.mu.Lock()
+				t.active = false
+				t.mu.Unlock()
+			case <-t.quit:
+				if !t.timer.Stop() {
+					<-t.timer.C
+				}
+			}
+		} else {
+			t.ticker = time.NewTicker(t.interval)
+			for {
+				select {
+				case <-t.ticker.C:
+					if t.TimeoutEvent != nil {
+						t.TimeoutEvent()
+					}
+				case <-t.quit:
+					t.ticker.Stop()
+					return
+				}
+			}
+		}
+	}()
 }
 
 func (t *BcsTimer) Stop() {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	if !t.isActive {
+	if !t.active {
 		return
 	}
-
-	t.isActive = false
-	close(t.stopChan)
+	t.active = false
+	close(t.quit)
 }
 
-func (t *BcsTimer) runLoop() {
+func (t *BcsTimer) IsActive() bool {
 	t.mu.Lock()
-	interval := t.interval
-	singleShot := t.singleShot
-	stopChan := t.stopChan
-	timeoutFunc := t.timeoutFunc
-	timerId := t.timerId
-	t.mu.Unlock()
-
-	if singleShot {
-		timer := time.NewTimer(interval)
-		select {
-		case <-timer.C:
-			t.mu.Lock()
-			t.isActive = false
-			t.mu.Unlock()
-			if timeoutFunc != nil {
-				timeoutFunc()
-			}
-			t.dispatchTimerEvent(timerId)
-		case <-stopChan:
-			timer.Stop()
-		}
-	} else {
-		ticker := time.NewTicker(interval)
-		for {
-			select {
-			case <-ticker.C:
-				if timeoutFunc != nil {
-					timeoutFunc()
-				}
-				t.dispatchTimerEvent(timerId)
-			case <-stopChan:
-				ticker.Stop()
-				return
-			}
-		}
-	}
-}
-
-func (t *BcsTimer) dispatchTimerEvent(timerId int) {
-	// Post BcsTimerEvent to target (which is this timer object)
-	event := NewBcsTimerEvent(timerId)
-	if k := GetKernel(); k.eventLoop != nil {
-		k.eventLoop.dispatcher.PostEvent(event)
-	}
-}
-
-// BcsCoreApplication models QCoreApplication for basic lifecycle
-type BcsCoreApplication struct {
-	*BcsObject
-	kernel *BcsKernel
-}
-
-var coreAppInstance *BcsCoreApplication
-var coreAppOnce sync.Once
-
-func GetCoreApplication() *BcsCoreApplication {
-	coreAppOnce.Do(func() {
-		coreAppInstance = &BcsCoreApplication{
-			BcsObject: NewBcsObject(nil),
-			kernel:    GetKernel(),
-		}
-	})
-	return coreAppInstance
-}
-
-func (a *BcsCoreApplication) Exec() int {
-	return a.kernel.Exec()
-}
-
-func (a *BcsCoreApplication) Quit() {
-	a.kernel.Shutdown()
+	defer t.mu.Unlock()
+	return t.active
 }

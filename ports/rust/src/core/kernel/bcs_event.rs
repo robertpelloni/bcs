@@ -1,160 +1,119 @@
-use std::sync::{Arc, Mutex};
+use std::cell::RefCell;
+use std::collections::BinaryHeap;
+use std::rc::{Rc, Weak};
+use std::sync::{Arc, Condvar, Mutex};
+use std::sync::atomic::{AtomicBool, Ordering as AtomicOrdering};
+use std::cmp::Ordering;
 
-/// EventType enumerates all global event IDs modeled after C++ QEvent::Type
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum EventType {
-    None = 0,
-    Timer,
-    MouseButtonPress,
-    MouseButtonRelease,
-    MouseButtonDblClick,
-    MouseMove,
-    KeyPress,
-    KeyRelease,
-    FocusIn,
-    FocusOut,
-    Enter,
-    Leave,
-    Paint,
-    Move,
-    Resize,
-    Create,
-    Destroy,
-    Show,
-    Hide,
-    Close,
-    Quit,
-    ApplicationActivate,
-    ApplicationDeactivate,
-    DynamicPropertyChange,
-    User = 1000,
-}
-
-pub trait BcsEventT: Send + Sync {
-    fn as_any(&self) -> &dyn std::any::Any;
-    fn event_type(&self) -> EventType;
-    fn is_spontaneous(&self) -> bool;
-    fn is_accepted(&self) -> bool;
-    fn accept(&self);
-    fn ignore(&self);
-    fn set_accepted(&self, accept: bool);
-}
-
+#[derive(Clone, Eq, PartialEq)]
 pub struct BcsEvent {
-    event_type: EventType,
-    spontaneous: bool,
-    accepted: Mutex<bool>,
+    pub event_type: i32,
+    pub priority: i32,
 }
 
 impl BcsEvent {
-    pub fn new(event_type: EventType) -> Self {
-        Self {
-            event_type,
-            spontaneous: false,
-            accepted: Mutex::new(true),
+    pub fn new(event_type: i32, priority: i32) -> Self {
+        BcsEvent { event_type, priority }
+    }
+}
+
+// Order by priority for BinaryHeap (max-heap by default)
+impl Ord for BcsEvent {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.priority.cmp(&other.priority)
+    }
+}
+
+impl PartialOrd for BcsEvent {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+pub struct BcsObject {
+    pub parent: Option<Weak<RefCell<BcsObject>>>,
+    pub children: Vec<Rc<RefCell<BcsObject>>>,
+    pub event_filters: Vec<Box<dyn Fn(&BcsEvent) -> bool>>,
+}
+
+impl BcsObject {
+    pub fn new(parent: Option<Rc<RefCell<BcsObject>>>) -> Rc<RefCell<Self>> {
+        let obj = Rc::new(RefCell::new(BcsObject {
+            parent: parent.as_ref().map(|p| Rc::downgrade(p)),
+            children: Vec::new(),
+            event_filters: Vec::new(),
+        }));
+
+        if let Some(p) = parent {
+            p.borrow_mut().children.push(obj.clone());
+        }
+
+        obj
+    }
+
+    pub fn install_event_filter<F>(&mut self, filter: F)
+    where
+        F: Fn(&BcsEvent) -> bool + 'static,
+    {
+        self.event_filters.push(Box::new(filter));
+    }
+
+    pub fn handle_event(&self, e: &BcsEvent) -> bool {
+        for filter in &self.event_filters {
+            if filter(e) {
+                return true;
+            }
+        }
+        false
+    }
+}
+
+pub struct BcsEventLoop {
+    queue: Mutex<BinaryHeap<BcsEvent>>,
+    cond: Condvar,
+    quit: AtomicBool,
+}
+
+impl BcsEventLoop {
+    pub fn new() -> Arc<Self> {
+        Arc::new(BcsEventLoop {
+            queue: Mutex::new(BinaryHeap::new()),
+            cond: Condvar::new(),
+            quit: AtomicBool::new(false),
+        })
+    }
+
+    pub fn post_event(&self, e: BcsEvent) {
+        let mut queue = self.queue.lock().unwrap();
+        queue.push(e);
+        self.cond.notify_one();
+    }
+
+    pub fn exec(&self) {
+        let mut queue = self.queue.lock().unwrap();
+
+        while !self.quit.load(AtomicOrdering::SeqCst) {
+            while queue.is_empty() && !self.quit.load(AtomicOrdering::SeqCst) {
+                // Wait for condition variable, releasing the queue lock during the wait
+                queue = self.cond.wait(queue).unwrap();
+            }
+
+            if self.quit.load(AtomicOrdering::SeqCst) {
+                break;
+            }
+
+            let e_opt = queue.pop();
+            drop(queue);
+
+            if let Some(_e) = e_opt {
+                // Dispatch event
+            }
+            queue = self.queue.lock().unwrap();
         }
     }
 
-    pub fn set_spontaneous(&mut self, spontaneous: bool) {
-        self.spontaneous = spontaneous;
+    pub fn quit(&self) {
+        self.quit.store(true, AtomicOrdering::SeqCst);
+        self.cond.notify_all();
     }
-}
-
-impl BcsEventT for BcsEvent {
-    fn as_any(&self) -> &dyn std::any::Any { self }
-    fn event_type(&self) -> EventType {
-        self.event_type
-    }
-
-    fn is_spontaneous(&self) -> bool {
-        self.spontaneous
-    }
-
-    fn is_accepted(&self) -> bool {
-        *self.accepted.lock().unwrap()
-    }
-
-    fn accept(&self) {
-        *self.accepted.lock().unwrap() = true;
-    }
-
-    fn ignore(&self) {
-        *self.accepted.lock().unwrap() = false;
-    }
-
-    fn set_accepted(&self, accept: bool) {
-        *self.accepted.lock().unwrap() = accept;
-    }
-}
-
-pub struct BcsTimerEvent {
-    base: BcsEvent,
-    pub timer_id: i32,
-}
-
-impl BcsTimerEvent {
-    pub fn new(timer_id: i32) -> Self {
-        Self {
-            base: BcsEvent::new(EventType::Timer),
-            timer_id,
-        }
-    }
-}
-
-impl BcsEventT for BcsTimerEvent {
-    fn as_any(&self) -> &dyn std::any::Any { self }
-    fn event_type(&self) -> EventType { self.base.event_type() }
-    fn is_spontaneous(&self) -> bool { self.base.is_spontaneous() }
-    fn is_accepted(&self) -> bool { self.base.is_accepted() }
-    fn accept(&self) { self.base.accept() }
-    fn ignore(&self) { self.base.ignore() }
-    fn set_accepted(&self, accept: bool) { self.base.set_accepted(accept) }
-}
-
-pub struct BcsDynamicPropertyChangeEvent {
-    base: BcsEvent,
-    pub property_name: Vec<u8>,
-}
-
-impl BcsDynamicPropertyChangeEvent {
-    pub fn new(property_name: Vec<u8>) -> Self {
-        Self {
-            base: BcsEvent::new(EventType::DynamicPropertyChange),
-            property_name,
-        }
-    }
-}
-
-impl BcsEventT for BcsDynamicPropertyChangeEvent {
-    fn as_any(&self) -> &dyn std::any::Any { self }
-    fn event_type(&self) -> EventType { self.base.event_type() }
-    fn is_spontaneous(&self) -> bool { self.base.is_spontaneous() }
-    fn is_accepted(&self) -> bool { self.base.is_accepted() }
-    fn accept(&self) { self.base.accept() }
-    fn ignore(&self) { self.base.ignore() }
-    fn set_accepted(&self, accept: bool) { self.base.set_accepted(accept) }
-}
-
-pub struct BcsCustomEvent {
-    base: BcsEvent,
-    pub data: Option<Box<dyn std::any::Any + Send + Sync>>,
-}
-
-impl BcsCustomEvent {
-    pub fn new(event_type: EventType, data: Option<Box<dyn std::any::Any + Send + Sync>>) -> Self {
-        Self {
-            base: BcsEvent::new(event_type),
-            data,
-        }
-    }
-}
-
-impl BcsEventT for BcsCustomEvent {
-    fn as_any(&self) -> &dyn std::any::Any { self }
-    fn event_type(&self) -> EventType { self.base.event_type() }
-    fn is_spontaneous(&self) -> bool { self.base.is_spontaneous() }
-    fn is_accepted(&self) -> bool { self.base.is_accepted() }
-    fn accept(&self) { self.base.accept() }
-    fn ignore(&self) { self.base.ignore() }
-    fn set_accepted(&self, accept: bool) { self.base.set_accepted(accept) }
 }

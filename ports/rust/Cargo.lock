@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "bcs-rust"
-version = "0.1.0"
+name = "bcs"
+version = "0.3.22"

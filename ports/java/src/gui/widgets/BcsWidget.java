@@ -1,136 +1,47 @@
-package gui.widgets;
+package bcs.gui.widgets;
 
-import core.kernel.BcsEvent;
-import core.kernel.BcsObject;
-import java.util.concurrent.locks.ReentrantLock;
+import bcs.core.kernel.BcsEvent;
+import bcs.core.kernel.BcsObject; // Assume BcsObject is ported and public
+import bcs.core.tools.BcsGeometry.BcsRect;
 
-public class BcsWidget extends BcsObject {
-    private boolean visible = false;
-    private boolean enabled = true;
-    private int width = 0;
-    private int height = 0;
-    private int x = 0;
-    private int y = 0;
-    private boolean hasFocus = false;
-    private final ReentrantLock lock = new ReentrantLock();
+// BcsWidget is the base class for all UI elements
+public class BcsWidget extends bcs.core.kernel.BcsObject {
+    private BcsRect geometry;
+    private boolean visible;
 
-    public BcsWidget() {
-        this(null);
-    }
+    // Comprehensive UI Representation properties
+    public String toolTip;
+    public String description;
+    public String label;
 
     public BcsWidget(BcsWidget parent) {
         super(parent);
+        this.geometry = new BcsRect(0, 0, 100, 100);
+        this.visible = true;
+        this.toolTip = "";
+        this.description = "";
+        this.label = "";
+    }
+
+    public void setGeometry(int x, int y, int width, int height) {
+        this.geometry = new BcsRect(x, y, width, height);
+    }
+
+    public BcsRect getGeometry() {
+        return this.geometry;
     }
 
     public void show() {
-        lock.lock();
-        try {
-            visible = true;
-        } finally {
-            lock.unlock();
-        }
+        this.visible = true;
     }
 
     public void hide() {
-        lock.lock();
-        try {
-            visible = false;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean isVisible() {
-        lock.lock();
-        try {
-            return visible;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void resize(int width, int height) {
-        lock.lock();
-        try {
-            this.width = width;
-            this.height = height;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void move(int x, int y) {
-        lock.lock();
-        try {
-            this.x = x;
-            this.y = y;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean isEnabled() {
-        lock.lock();
-        try {
-            return enabled;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void setEnabled(boolean enabled) {
-        lock.lock();
-        try {
-            this.enabled = enabled;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean hasFocus() {
-        lock.lock();
-        try {
-            return hasFocus;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void setFocus(boolean hasFocus) {
-        lock.lock();
-        try {
-            this.hasFocus = hasFocus;
-        } finally {
-            lock.unlock();
-        }
+        this.visible = false;
     }
 
     @Override
     public boolean event(BcsEvent e) {
-        switch (e.getType()) {
-            case MouseButtonPress:
-                mousePressEvent(e);
-                return true;
-            case MouseButtonRelease:
-                mouseReleaseEvent(e);
-                return true;
-            case KeyPress:
-                keyPressEvent(e);
-                return true;
-            case KeyRelease:
-                keyReleaseEvent(e);
-                return true;
-            case Paint:
-                paintEvent(e);
-                return true;
-            default:
-                return super.event(e);
-        }
+        // Widget specific event routing
+        return super.event(e);
     }
-
-    protected void mousePressEvent(BcsEvent e) {}
-    protected void mouseReleaseEvent(BcsEvent e) {}
-    protected void keyPressEvent(BcsEvent e) {}
-    protected void keyReleaseEvent(BcsEvent e) {}
-    protected void paintEvent(BcsEvent e) {}
 }

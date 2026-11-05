@@ -1,127 +1,69 @@
-package core.kernel;
+package bcs.core.kernel;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.Timer;
+import java.util.TimerTask;
 
+// BcsTimer provides a cross-platform high-level timer mapping to C++ QTimer natively using java.util.Timer
 public class BcsTimer extends BcsObject {
-    private static final AtomicInteger timerIdCounter = new AtomicInteger(1);
-
-    private int intervalMs = 0;
-    private boolean singleShot = false;
-    private final AtomicBoolean isActive = new AtomicBoolean(false);
-    private final int timerId;
-    private ScheduledExecutorService executor;
-    private ScheduledFuture<?> scheduledTask;
-    private Runnable timeoutCallback;
-    private final ReentrantLock lock = new ReentrantLock();
-
-    public BcsTimer() {
-        this(null);
-    }
+    private int interval;
+    private boolean singleShot;
+    private boolean active;
+    private Timer timer;
+    private Runnable timeoutEvent;
 
     public BcsTimer(BcsObject parent) {
         super(parent);
-        this.timerId = timerIdCounter.getAndIncrement();
-    }
-
-    public int getTimerId() {
-        return timerId;
+        this.interval = 0;
+        this.singleShot = false;
+        this.active = false;
     }
 
     public void setInterval(int msec) {
-        lock.lock();
-        try {
-            this.intervalMs = msec;
-        } finally {
-            lock.unlock();
-        }
+        this.interval = msec;
     }
 
     public void setSingleShot(boolean singleShot) {
-        lock.lock();
-        try {
-            this.singleShot = singleShot;
-        } finally {
-            lock.unlock();
-        }
+        this.singleShot = singleShot;
     }
 
-    public boolean isActive() {
-        return isActive.get();
+    public void setTimeoutEvent(Runnable callback) {
+        this.timeoutEvent = callback;
     }
 
-    public void connectTimeout(Runnable r) {
-        lock.lock();
-        try {
-            this.timeoutCallback = r;
-        } finally {
-            lock.unlock();
-        }
-    }
+    public synchronized void start() {
+        if (this.active) return;
+        this.active = true;
+        this.timer = new Timer(true); // Run as daemon
 
-    public void start(int msec) {
-        if (msec > 0) {
-            setInterval(msec);
-        }
-        start();
-    }
-
-    public void start() {
-        stop();
-
-        lock.lock();
-        try {
-            isActive.set(true);
-            executor = Executors.newSingleThreadScheduledExecutor();
-
-            Runnable task = () -> {
-                if (!isActive.get()) return;
-
-                if (timeoutCallback != null) {
-                    timeoutCallback.run();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if (timeoutEvent != null) {
+                    timeoutEvent.run();
                 }
-                dispatchTimerEvent();
-
                 if (singleShot) {
-                    isActive.set(false);
+                    active = false;
                 }
-            };
-
-            if (singleShot) {
-                scheduledTask = executor.schedule(task, intervalMs, TimeUnit.MILLISECONDS);
-            } else {
-                scheduledTask = executor.scheduleAtFixedRate(task, intervalMs, intervalMs, TimeUnit.MILLISECONDS);
             }
-        } finally {
-            lock.unlock();
+        };
+
+        if (this.singleShot) {
+            this.timer.schedule(task, this.interval);
+        } else {
+            this.timer.scheduleAtFixedRate(task, this.interval, this.interval);
         }
     }
 
-    public void stop() {
-        if (!isActive.compareAndSet(true, false)) {
-            return;
-        }
-
-        lock.lock();
-        try {
-            if (scheduledTask != null) {
-                scheduledTask.cancel(false);
-            }
-            if (executor != null) {
-                executor.shutdown();
-            }
-        } finally {
-            lock.unlock();
+    public synchronized void stop() {
+        if (!this.active) return;
+        this.active = false;
+        if (this.timer != null) {
+            this.timer.cancel();
+            this.timer = null;
         }
     }
 
-    private void dispatchTimerEvent() {
-        BcsTimerEvent e = new BcsTimerEvent(timerId);
-        BcsKernel.getInstance().getEventLoop().getDispatcher().postEvent(e);
+    public synchronized boolean isActive() {
+        return this.active;
     }
 }

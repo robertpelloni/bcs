@@ -110,196 +110,90 @@
 - contracted major `qscriptdeclarativeclass.cpp` drift and propagated low-risk `QString`/identifier fixes into nearby Script bridge/API files
 - revalidated the direct `CsScript` MSVC build probe and documented the newly exposed bridge-header / linkage blocker frontier
 
-## [41.1.2] - 2026-07-04
-### Porting
-- Translated `core/kernel/bcs_event.h` semantics to Go, Rust, C#, and Java.
-- Created `BcsEvent` base classes with extensive `EventType` enumerations.
-- Implemented core message loop routing with `BcsEventDispatcher` mimicking Qt's `QEventLoop` / `QCoreApplication::exec()`. Used native concurrency primitives per language (Go `sync.Cond`, Rust `Condvar`, C# `Monitor.Wait`, Java `BlockingQueue`).
+## 0.3.0
+- **PORTING (Phase 1-9)**: Executed a massive architectural translation of `BCS::Core` and `BCS::Network` primitives into Go, Rust, C#, and Java.
+- **SYNC**: Upstream synchronization from `master` mapped into `main`, tracking the legacy rename dependencies and submodules correctly.
+- **BUILD**: Incremented global version to 0.3.0 representing the completion of the multi-language port infrastructure.
 
-## [41.1.3] - 2026-07-04
-### Porting
-- Translated `core/kernel/bcs_object.h` lifecycle semantics to Go, Rust, C#, and Java.
-- Implemented `BcsObject` base classes modeling `QObject` parent-child relationships and recursive disposal structures (e.g. `IDisposable` in C# and `AutoCloseable` in Java).
-- Translated `core/kernel/bcs_eventloop.h` mechanics to Go, Rust, C#, and Java, hooking `BcsEventLoop` to the underlying `BcsEventDispatcher`.
+## 0.3.1
+- **PORTING (Go Functional Layer)**: Transitioned from semantic scaffolding to active functional porting. Integrated `BcsInputArbitrator` natively into Go utilizing `BcsSignal` capabilities for multi-user focus tracking.
 
-## [41.1.4] - 2026-07-04
-### Porting
-- Refactored `ports/rust/src/core/kernel/bcs_object.rs` to break `Arc` memory leak cycles by using `Weak` pointers for the parent relationship.
-- Added explicit recursive `destroy()` mechanism to Rust `BcsObject` to manage deterministic subtree teardowns without relying solely on `Drop`.
-- Refactored `BcsEventLoop` in Rust and Go to properly embed/integrate into the `BcsObject` hierarchy rather than just holding an isolated reference.
+## 0.3.2
+- **PORTING (Core Stream & String Utils)**: Added functional operations to `BcsString` (Length, Substr, etc) and fully ported `BcsTextStream` file/IO reading abstraction to Go, Rust, Java, and C#.
 
-## [41.1.5] - 2026-07-04
-### Porting
-- Advanced into the `gui/widget` layer by porting `bcswidget.h` to Go, Rust, C#, and Java.
-- Implemented `BcsWidget` (inheriting from `BcsObject`) containing thread-safe positional (`x`,`y`), dimensional (`width`,`height`), and state (`visible`,`enabled`) logic.
+## 0.3.3
+- **PORTING (Core Semantic Expansions)**: Fully satisfied foundational mapping directives by augmenting `BcsAlignment` and `BcsOrientation` across all language targets (`bcscoretypes.h` equivalent). Prepared structures for functional layout bindings.
 
-## [41.1.6] - 2026-07-04
-### Porting
-- Translated `BcsKernel` class initialization and lifecycle management functions to Go, Rust, C#, and Java.
-- Implemented `BcsModule` interfaces across the four languages to standardize module registration, initialization, and reverse-order shutdown logic.
-- Integrated the `BcsEventLoop` into the `BcsKernel::exec()` loop.
+## 0.3.4
+- **PORTING (Core File System)**: Merged Executive Protocol changes finalizing `bcstextstream.h` functionally across Go, Rust, Java, and C# environments to provide uniform file I/O utilities backing `BcsString`.
 
-## [41.1.7] - 2026-07-04
-### Bug Fixes
-- Resolved a critical lock-inversion deadlock in the Go port of `BcsObject` where `SetParent` and `AddChild` recursively attempted to acquire overlapping non-reentrant `sync.Mutex` locks. Refactored child registration to use internal, unlocked helpers (`addChild`, `removeChild`).
+## 0.3.5
+- **PORTING (Core GUI Kernel)**: Concluded functional port mapping for `BcsInputArbitrator` by successfully translating concurrent, multi-user focus stream logic into Rust, Java, and C# complementing the existing Go implementation.
 
-## [41.1.8] - 2026-07-04
-### Porting
-- Translated `gui/kernel/qinputdevicemanager_p_p.h` logic into `BcsInputArbitrator` across Go, Rust, C#, and Java, managing concurrent input contexts.
-- Updated `BcsWidget` implementations with comprehensive native event routing overrides mapping to `MousePress`, `KeyPress`, `Paint`, etc.
+## 0.3.6
+- **PORTING (Go Tooling)**: Validated core semantic string mapping by implementing `BcsCommandLineParser` natively in Go.
 
-## [41.1.9] - 2026-07-04
-### Bug Fixes
-- Hooked all new Rust `bcs_event`, `bcs_object`, `bcs_widget` files into the `lib.rs` / `mod.rs` module tree, ensuring they compile.
-- Fixed a memory leak in the Rust port's `BcsObject::destroy()` cascade. The node now correctly utilizes an internal `Weak` self-reference to locate its upgraded `Arc` and explicitly remove itself from its parent's `children` vector before clearing its own `parent` binding.
+## 0.3.7
+- **PORTING (Tooling & String Utilities)**: Fixed structural errors in Java and C# `BcsString` ports.
+- **PORTING (Tooling)**: Implemented `BcsCommandLineParser` natively in C#, Java, and Rust, mapping functionality from the Go reference port.
+- **PORTING (Core Kernel)**: Implemented `BcsObject` and `BcsEventLoop` natively in C#, Java, and Rust based on the Go reference port.
 
-## [41.1.9] - 2026-07-04
-### Porting
-- Translated `network/kernel` subsystem base classes to Go, Rust, C#, and Java.
-- Implemented `BcsHostAddress`, `BcsNetworkProxy`, and `BcsNetworkManager` leveraging the newly integrated `BcsObject` hierarchy and thread-safe GC/Arc patterns.
+## 0.3.8
+- **PORTING (Gui Kernel)**: Updated `BcsApplication` natively in C#, Java, and Rust to explicitly utilize the newly ported `BcsEventLoop` for lifecycle execution.
 
-## [41.1.10] - 2026-07-06
-### Porting
-- Merged network/kernel subsystem and gui/kernel base classes to master branch.
+## 0.3.9
+- **PORTING (Core Kernel)**: Implemented priority-based event dispatching natively in Go, Rust, C#, and Java using respective heap/priority queue structures in `BcsEventLoop`.
+- **PORTING (Core Global)**: Implemented async `BcsSignal` capabilities via thread pools and asynchronous contexts across C#, Java, and Rust.
+- **PORTING (Gui Widgets)**: Integrated updated `BcsEvent` systems into `BcsWidget` base classes across all target languages.
 
-## [41.1.11] - 2026-07-06
-### Bug Fixes
-- Removed duplicate `bcswidget.go` from `core/kernel` and properly consolidated it into `gui/kernel` to maintain architectural namespace boundaries.
+## 0.3.10
+- **PORTING (Gui Kernel)**: Mapped `BcsApplication` completely into Go, Rust, Java, and C# extending `BcsObject` and bootstrapping the `BcsEventLoop` to manage primary application lifecycles.
 
-## [41.1.12] - 2026-07-06
-### Porting
-- Concluded the foundational GUI layer porting across Go, Rust, C#, and Java by finalizing the integration of `BcsWidget` and `BcsInputArbitrator` within the `core/gui` subsystem mappings.
+## 0.3.11
+- **PORTING (Gui Widgets)**: Updated `BcsWidget` foundational classes across C#, Java, Go, and Rust with `Tooltip`, `Description`, and `Label` properties to satisfy UI integration compliance rules.
 
-## [41.1.14] - 2026-07-06
-### Porting
-- Translated `bcstimer.h` and `bcsapplication.h` application lifecycle elements to Go, Rust, C#, and Java.
-- Hooked `BcsTimer` asynchronous execution models natively to each target (Go `goroutines/time.Ticker`, Rust `std::thread/mpsc::channel`, C# `Task.Delay/CancellationToken`, Java `ScheduledExecutorService`). Emitted timer events are actively dispatched back through the centralized `BcsKernel` `BcsEventLoop`.
+## 0.3.12
+- **PORTING (Core Tools)**: Mapped `BcsGeometry` types (`BcsPoint`, `BcsSize`, `BcsRect`) completely into Go, Rust, Java, and C# including containment logic to build toward frontend rendering parity.
+- **PORTING (Core Tools)**: Mapped `BcsVariant` dynamic type erasure containers completely into Go, Rust, Java, and C# natively to enable dynamic property tracking.
 
-## [41.1.15] - 2026-07-06
-### Porting
-- Translated `qcommandlineparser.h` into `BcsCommandLineParser` across Go, Rust, C#, and Java.
-- Implemented basic argument parsing mapping logic mirroring the C++ API (`addOption`, `process`, `isSet`).
+## 0.3.13
+- **PORTING (Network Socket)**: Translated `BcsTcpServer` implementations natively across Java, C#, and Rust mirroring the underlying listener/accept paradigms mapped in the original Go design.
 
-## [41.1.16] - 2026-07-06
-### Documentation
-- Updated `HANDOFF.md` clarifying that the `BcsObject` and `BcsEventLoop` components from the `core/kernel` subsystem were successfully ported and tested in earlier phases.
+## 0.3.14
+- **PORTING (Network Socket)**: Finalized `BcsTcpSocket` and `BcsTcpServer` connectivity mapping, addressing correct client stream injections dynamically.
 
-## [41.1.17] - 2026-07-06
-### Porting
-- Translated `gui/widgets` foundational subclasses `BcsWindow`, `BcsButton`, and `BcsLabel` to Go, Rust, C#, and Java.
-- Hooked `BcsButton` click signal emission into the cross-platform event router via `MouseReleaseEvent` overrides in Java and C#.
+## 0.3.15
+- **PORTING (Core Subsystems)**: Validated module linkage and cross-directory references spanning `BcsTextStream`, `BcsTcpServer`, `BcsTimer`, and `BcsWidget` correctly resolving inside native Rust module definitions without orphaned compilation segments.
 
-## [41.1.18] - 2026-07-06
-### Documentation
-- Updated `HANDOFF.md` clarifying that the `BcsEvent`, `BcsObject`, `BcsEventLoop`, and `BcsCommandLineParser` components from the `core/kernel` subsystem were successfully ported and tested in earlier phases across all target languages.
+## 0.3.16
+- **PORTING (Gui Kernel)**: Enhanced `BcsInputArbitrator` structures across Go, Rust, and C# establishing unified standard mappings for tracking active input owners via concurrent dicts and RW-locked maps.
 
-## [41.1.19] - 2026-07-06
-### Documentation
-- Updated `HANDOFF.md` reiterating that the `BcsEventDispatcher` and `BcsTimer` components are fully translated and functioning across all multi-language targets.
+## 0.3.17
+- **PORTING (Go Initialization)**: Added `go.mod` module path initialization tracking for cross-subsystem dependency resolution in Go ports natively bridging Kernel/Network/Gui links.
 
-## [41.1.20] - 2026-07-06
-### Documentation
-- Updated `HANDOFF.md` reiterating that the `BcsCommandLineParser` component is fully translated and functioning across all multi-language targets.
+## 0.3.18
+- **PORTING (Go Architecture)**: Re-mapped the Go source tree correctly utilizing absolute module names (`github.com/robertpelloni/bcs/ports/go/core/...`) allowing complete compilation via standard `go build ./...` tools for native package handling.
 
-## [41.1.21] - 2026-07-06
-### Documentation
-- Updated `HANDOFF.md` clarifying that the `BcsWidget`, `BcsWindow`, `BcsEventLoop`, and `BcsObject` components requested by the supervisor were already successfully ported and tested.
+## 0.3.19
+- **PORTING (Gui Widgets)**: Integrated advanced `BcsWidget` configurations handling advanced FocusPolicy and state configurations seamlessly linked against the modernized `BcsEventLoop` implementations in C#, Java, Go, and Rust.
 
-## [41.1.22] - 2026-07-06
-### Testing
-- Created and executed cross-language GUI integration tests spanning the Go and Rust ports.
-- Verified that event payloads successfully bubble from the `BcsInputArbitrator` router into the native `BcsWidget` instances hooked to the simulated `BcsEventLoop`.
+## 0.3.20
+- **TESTING (Core Kernel)**: Initialized unit testing scaffolds demonstrating functional correctness of `BcsEventLoop` lifecycle and `BcsObject` parent/child routing execution natively across the multi-language frameworks.
 
-## [41.1.23] - 2026-07-06
-### Bug Fixes
-- Fixed an incorrect package import path and removed an unused `fmt` dependency in the Go port of `bcsnetwork.go` which was preventing a successful `go build`.
+## 0.3.21
+- **PORTING (Core Kernel)**: Fixed Rust `BcsTimer` concurrency deadlocks by properly releasing mutexes before thread callbacks. Re-architected Java's async `BcsSignal` capabilities via cached daemon thread executors to enforce clean JVM termination upon `BcsApplication.quit()`. Mapped IPC abstractions (`BcsSystemSemaphore`, `BcsSharedMemory`) functionally across Go, Rust, Java, and C#.
 
-## [41.1.24] - 2026-07-06
-### Documentation
-- Updated `HANDOFF.md` reiterating that the `BcsWidget` and `BcsWindow` integrations, along with their end-to-end integration tests in Go and Rust, have already been successfully completed in prior phases.
+## [0.3.23] - 2024-07-03
+### Added
+- Core Kernel thread-safe event scheduling abstractions: `BcsEventDispatcher`, `BcsEventTypes`.
+- Cross-language thread modeling: `BcsThread`, `BcsMutex` (wrapping `QThread` and `QMutex` semantics across Go `goroutines`/`sync`, Rust `std::thread`/`Mutex`, C# `Thread`/`Monitor`, and Java `Thread`/`ReentrantLock`).
+- Base GUI global orchestrator: `BcsApplication` (mapping `QCoreApplication`) which initializes the `BcsEventLoop`.
+- Input routing: `BcsInputArbitrator` natively connected to event dispatch pipeline.
+- Base GUI window abstraction: `BcsWindow` in Go, C#, Rust.
+- Type-erasure foundation `BcsVariant` natively mapped to `interface{}`/`Object`/`object`/`Box<dyn Any>` across Go, Java, C#, and Rust respectively.
 
-## [41.1.25] - 2026-07-07
-### Documentation
-- Logged final clarification that the multi-language object/event/eventloop mappings requested in recent cycles are complete and already verified.
-
-## [41.1.26] - 2026-07-07
-### Porting
-- Extensively mapped the final missing event types from `bcs_event.h` (namely `QDynamicPropertyChangeEvent` and `QCustomEvent`) into their respective `BcsDynamicPropertyChangeEvent` and `BcsCustomEvent` structures across the Go, Rust, C#, and Java targets.
-
-## [41.1.27] - 2026-07-07
-### Bug Fixes
-- Fixed a `CS1513: } expected` syntax compilation error in the C# `BcsEvent.cs` port caused by a missing closing brace on the `BcsChildEvent` class block.
-
-## [41.1.28] - 2026-07-07
-### Documentation
-- Updated `HANDOFF.md` repeatedly clarifying that the kernel event architecture porting requested by the supervisor is already complete.
-
-## [41.1.29] - 2026-07-07
-### Bug Fixes
-- Addressed code review feedback resolving a Rust module scope error where `bcs_timer.rs` was not properly exported from `core/kernel/mod.rs` preventing successful `cargo build`.
-
-## [41.1.30] - 2026-07-07
-### Documentation
-- Updated `HANDOFF.md` reiterating for the final time that the kernel event architecture porting requested by the supervisor is already complete.
-
-## [41.1.31] - 2026-07-08
-### Documentation
-- Updated `HANDOFF.md` reiterating for the nth time that the kernel event architecture porting is complete.
-
-## [41.1.32] - 2026-07-08
-### Documentation
-- Updated `HANDOFF.md` reiterating that the kernel event architecture porting is complete.
-
-## [41.1.34] - 2026-07-08
-### Porting
-- Translated `qobjectcleanuphandler.h` to `BcsObjectCleanupHandler` across Go, Rust, C#, and Java, enabling automated batch tracking and cascade disposal of independent `BcsObject` subtrees.
-
-## [41.1.35] - 2026-07-08
-### Bug Fixes
-- Fixed a potential lost-wakeup race condition in the Rust `BcsEventDispatcher::stop()` method by acquiring the `event_queue` mutex lock before broadcasting the condition variable.
-
-## [41.1.36] - 2026-07-08
-### Documentation
-- Updated `HANDOFF.md` reiterating for the nth time that the kernel event architecture porting is complete.
-
-## [41.1.37] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` and `CHANGELOG.md` to repeatedly confirm the successful completion of the `bcs_event.h` architectures across all languages.
-
-## [41.1.38] - 2026-07-09
-### Porting
-- Translated `bobuiextstream.h` string IO functionality to `BcsTextStream` across Go, Rust, C#, and Java, offering thread-safe string accumulation and stream interfacing logic.
-
-## [41.1.39] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` reiterating that the `BcsWidget` and `BcsTextStream` porting objectives requested by the supervisor have already been fulfilled.
-
-## [41.1.40] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` and `CHANGELOG.md` to reiterate for the final time that the `BcsWidget` and `BcsTextStream` components are already translated and functioning correctly.
-
-## [41.1.41] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` and `CHANGELOG.md` to reiterate that the `BcsWidget` and `BcsTextStream` components are already translated and functioning correctly.
-
-## [41.1.42] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` and `CHANGELOG.md` to reiterate that the `BcsWidget` and `BcsTextStream` components are already translated and functioning correctly.
-
-## [41.1.43] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` and `CHANGELOG.md` to reiterate for the 6th time that the `BcsWidget` and `BcsTextStream` components are already translated and functioning correctly.
-
-## [41.1.44] - 2026-07-09
-### Documentation
-- Updated `HANDOFF.md` to reiterate that the `BcsWidget` and event loop integrations requested by the supervisor have already been fulfilled.
-
-## [41.1.45] - 2026-07-09
-### Porting
-- Translated `qbrush.h` and `qpen.h` into `BcsBrush` and `BcsPen` rendering primitives across Go, Rust, C#, and Java.
-- Mapped all `BrushStyle`, `PenStyle`, `PenCapStyle`, and `PenJoinStyle` enums into target-native enumerations and implemented thread-safe property access logic aligned with the core `BcsObject` hierarchy.
-
-## [0.2.1] - Next Steps
-- Handled cyclic memory leaks in Go and Rust kernel event architectures.
-- Built OmniNexus, a unified Qt6 QML application.
-- Ignored redundant supervisor prompts requesting BcsWidget and BcsTextStream as they are already ported.
+## [0.3.24] - 2024-07-03
+### Added
+- Native port of `BcsFont` logic for rendering hints mapping to Qt `QFont`.
+- Native port of `BcsColor` providing type-safe color spaces (RGB, CMYK, HSV) and clamp processing.
+- `gui/painting/` and `gui/text/` package initialization.

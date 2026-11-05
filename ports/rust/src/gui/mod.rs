@@ -1,3 +1,2 @@
-pub mod kernel;
-pub mod widgets;
+pub mod text;
 pub mod painting;

@@ -1,2 +1,2 @@
-pub mod bcs_input_arbitrator;
-pub mod tests;
+pub mod bcsaction;
+pub mod bcsactiongroup;

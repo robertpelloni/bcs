@@ -1,68 +1,46 @@
-package gui.kernel;
+package bcs.gui.kernel;
 
-import core.kernel.BcsEvent;
-import core.kernel.BcsObject;
-import gui.widgets.BcsWidget;
-import java.util.concurrent.locks.ReentrantLock;
+import bcs.core.global.BcsSignal;
+import bcs.core.kernel.BcsEvent; // BcsObject conceptual parent
+import bcs.core.kernel.*; // Assuming BcsObject is here
+import java.util.concurrent.ConcurrentHashMap;
 
-public class BcsInputArbitrator extends BcsObject {
+// BcsInputOwner maps the conceptual multi-user network ID to an input source
+class BcsInputOwner {
+    public String id;
+    public String name;
 
-    public enum DeviceType {
-        Pointer,
-        Keyboard,
-        Touch,
-        Tablet,
-        NumDeviceTypes
+    public BcsInputOwner(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}
+
+// BcsInputArbitrator handles multi-user event streams and focus delegation natively
+public class BcsInputArbitrator {
+    private final ConcurrentHashMap<String, BcsInputOwner> activeOwners;
+    public final BcsSignal<BcsInputOwner> focusChanged;
+
+    public BcsInputArbitrator() {
+        this.activeOwners = new ConcurrentHashMap<>();
+        this.focusChanged = new BcsSignal<>();
     }
 
-    private static volatile BcsInputArbitrator instance;
-    private final int[] deviceCounts = new int[DeviceType.NumDeviceTypes.ordinal()];
-    private final ReentrantLock lock = new ReentrantLock();
-
-    private BcsInputArbitrator() {
-        super(null);
+    // RegisterOwner adds a new network or local user to the arbitrator's pool
+    public void registerOwner(BcsInputOwner owner) {
+        activeOwners.put(owner.id, owner);
     }
 
-    public static BcsInputArbitrator getInstance() {
-        if (instance == null) {
-            synchronized (BcsInputArbitrator.class) {
-                if (instance == null) {
-                    instance = new BcsInputArbitrator();
-                }
-            }
+    // RequestFocus attempts to route the target focus token to the specified owner
+    public boolean requestFocus(String ownerId, Object targetWidget) { // Object used for BcsObject proxy
+        BcsInputOwner owner = activeOwners.get(ownerId);
+
+        if (owner == null || targetWidget == null) {
+            return false;
         }
-        return instance;
-    }
 
-    public int deviceCount(DeviceType type) {
-        lock.lock();
-        try {
-            int ordinal = type.ordinal();
-            if (ordinal >= 0 && ordinal < deviceCounts.length) {
-                return deviceCounts[ordinal];
-            }
-            return 0;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void setDeviceCount(DeviceType type, int count) {
-        lock.lock();
-        try {
-            int ordinal = type.ordinal();
-            if (ordinal >= 0 && ordinal < deviceCounts.length) {
-                deviceCounts[ordinal] = count;
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean routeEvent(BcsEvent event, BcsWidget target) {
-        if (target != null) {
-            return target.event(event);
-        }
-        return false;
+        // Emit signal broadcasting focus shift logic
+        focusChanged.emit(owner);
+        return true;
     }
 }

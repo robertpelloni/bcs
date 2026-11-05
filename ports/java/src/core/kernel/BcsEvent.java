@@ -1,70 +1,21 @@
-package core.kernel;
+package bcs.core.kernel;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+public class BcsEvent implements Comparable<BcsEvent> {
+    public int type;
+    public int priority;
 
-public abstract class BcsEvent {
-
-    public enum EventType {
-        None,
-        Timer,
-        MouseButtonPress,
-        MouseButtonRelease,
-        MouseButtonDblClick,
-        MouseMove,
-        KeyPress,
-        KeyRelease,
-        FocusIn,
-        FocusOut,
-        Enter,
-        Leave,
-        Paint,
-        Move,
-        Resize,
-        Create,
-        Destroy,
-        Show,
-        Hide,
-        Close,
-        Quit,
-        ApplicationActivate,
-        ApplicationDeactivate,
-        DynamicPropertyChange,
-        User
+    public BcsEvent(int type) {
+        this(type, 0);
     }
 
-    private final EventType type;
-    private boolean spontaneous = false;
-    private final AtomicBoolean accepted = new AtomicBoolean(true);
-
-    protected BcsEvent(EventType type) {
+    public BcsEvent(int type, int priority) {
         this.type = type;
+        this.priority = priority;
     }
 
-    public EventType getType() {
-        return type;
-    }
-
-    public boolean isSpontaneous() {
-        return spontaneous;
-    }
-
-    public void setSpontaneous(boolean spontaneous) {
-        this.spontaneous = spontaneous;
-    }
-
-    public boolean isAccepted() {
-        return accepted.get();
-    }
-
-    public void setAccepted(boolean accepted) {
-        this.accepted.set(accepted);
-    }
-
-    public void accept() {
-        setAccepted(true);
-    }
-
-    public void ignore() {
-        setAccepted(false);
+    @Override
+    public int compareTo(BcsEvent other) {
+        // Higher priority first
+        return Integer.compare(other.priority, this.priority);
     }
 }

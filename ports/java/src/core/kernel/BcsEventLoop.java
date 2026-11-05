@@ -1,48 +1,33 @@
-package core.kernel;
+package bcs.core.kernel;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.PriorityBlockingQueue;
 
-public class BcsEventLoop extends BcsObject {
-    private final BcsEventDispatcher dispatcher;
-
-    public BcsEventDispatcher getDispatcher() {
-        return dispatcher;
-    }
-
-    private final AtomicBoolean isRunning = new AtomicBoolean(false);
-    private final AtomicInteger quitCode = new AtomicInteger(0);
+public class BcsEventLoop {
+    private PriorityBlockingQueue<BcsEvent> queue;
+    private volatile boolean quit = false;
 
     public BcsEventLoop() {
-        this(new BcsEventDispatcher(), null);
+        this.queue = new PriorityBlockingQueue<>(1024);
     }
 
-    public BcsEventLoop(BcsEventDispatcher dispatcher, BcsObject parent) {
-        super(parent);
-        this.dispatcher = dispatcher != null ? dispatcher : new BcsEventDispatcher();
+    public void postEvent(BcsEvent e) {
+        this.queue.put(e);
     }
 
-    public int exec() {
-        if (!isRunning.compareAndSet(false, true)) {
-            return -1;
+    public void exec() {
+        try {
+            while (!quit) {
+                BcsEvent e = this.queue.take();
+                // Dispatch event to application roots
+            }
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
         }
-
-        dispatcher.exec();
-
-        isRunning.set(false);
-        return quitCode.get();
-    }
-
-    public void exit(int returnCode) {
-        quitCode.set(returnCode);
-        dispatcher.stop();
     }
 
     public void quit() {
-        exit(0);
-    }
-
-    public boolean isRunning() {
-        return isRunning.get();
+        this.quit = true;
+        BcsEvent quitEvent = new BcsEvent(-1, Integer.MAX_VALUE);
+        this.postEvent(quitEvent); // Unblock queue.take()
     }
 }

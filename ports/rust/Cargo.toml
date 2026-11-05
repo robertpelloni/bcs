@@ -1,6 +1,6 @@
 [package]
-name = "bcs-rust"
-version = "0.1.0"
+name = "bcs"
+version = "0.3.22"
 edition = "2021"
 
 [dependencies]

@@ -1,73 +1,23 @@
-using System;
-using Bcs.Core.Kernel;
+using BCS.Core.Global;
 
-namespace Bcs.Gui.Painting
-{
-    public enum PenStyle
-    {
-        NoPen = 0,
-        SolidLine,
-        DashLine,
-        DotLine,
-        DashDotLine,
-        DashDotDotLine,
-        CustomDashLine
+namespace BCS.Gui.Painting {
+    // BcsPen defines how lines and outlines are drawn
+    public class BcsPen {
+        public BcsGlobalColor Color { get; set; }
+        public int Width { get; set; }
+
+        public BcsPen(BcsGlobalColor color, int width = 1) {
+            Color = color;
+            Width = width;
+        }
     }
 
-    public enum PenCapStyle
-    {
-        FlatCap = 0,
-        SquareCap,
-        RoundCap
-    }
+    // BcsBrush defines how shapes are filled
+    public class BcsBrush {
+        public BcsGlobalColor Color { get; set; }
 
-    public enum PenJoinStyle
-    {
-        MiterJoin = 0,
-        BevelJoin,
-        RoundJoin,
-        SvgMiterJoin
-    }
-
-    public class BcsPen : BcsObject
-    {
-        private PenStyle _style = PenStyle.SolidLine;
-        private string _color = "#000000";
-        private double _width = 1.0;
-        private PenCapStyle _capStyle = PenCapStyle.SquareCap;
-        private PenJoinStyle _joinStyle = PenJoinStyle.BevelJoin;
-        private readonly object _lock = new object();
-
-        public BcsPen() : base(null) {}
-
-        public PenStyle Style
-        {
-            get { lock (_lock) { return _style; } }
-            set { lock (_lock) { _style = value; } }
-        }
-
-        public string Color
-        {
-            get { lock (_lock) { return _color; } }
-            set { lock (_lock) { _color = value; } }
-        }
-
-        public double Width
-        {
-            get { lock (_lock) { return _width; } }
-            set { lock (_lock) { _width = value; } }
-        }
-
-        public PenCapStyle CapStyle
-        {
-            get { lock (_lock) { return _capStyle; } }
-            set { lock (_lock) { _capStyle = value; } }
-        }
-
-        public PenJoinStyle JoinStyle
-        {
-            get { lock (_lock) { return _joinStyle; } }
-            set { lock (_lock) { _joinStyle = value; } }
+        public BcsBrush(BcsGlobalColor color) {
+            Color = color;
         }
     }
 }

@@ -1,20 +1,27 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BCS.Core.Global {
-    // Maps the C++ BCS Signal to a standard C# event delegate architecture
     public class BcsSignal<T> {
-        public event Action<T> OnEmit;
+        private readonly List<Action<T>> _listeners = new List<Action<T>>();
+        private readonly object _lock = new object();
 
-        public void Connect(Action<T> handler) {
-            OnEmit += handler;
-        }
-
-        public void Disconnect(Action<T> handler) {
-            OnEmit -= handler;
+        public void Connect(Action<T> callback) {
+            lock (_lock) {
+                _listeners.Add(callback);
+            }
         }
 
         public void Emit(T payload) {
-            OnEmit?.Invoke(payload);
+            List<Action<T>> listenersCopy;
+            lock (_lock) {
+                listenersCopy = new List<Action<T>>(_listeners);
+            }
+
+            foreach (var listener in listenersCopy) {
+                Task.Run(() => listener(payload));
+            }
         }
     }
 }
