@@ -24,8 +24,21 @@
 - [x] Build with `-DBUILD_TESTS=ON` and run Catch2 core: **1081/1082 pass**
       (ctest needs `build\bin\Release` on PATH — see CHANGELOG 0.3.28)
 - [ ] Run Catch2 `test/gui` + `test/network` (build in progress in `build/`)
-- [ ] `QDateTime std_chrono` fails on non-Pacific Windows zones
-      (fromStdLocalTime DST handling) — investigate or run on a Pacific machine
+- [ ] `QDateTime std_chrono` (test/core/datetime/qdatetime.cpp:467): two
+      stacked defects, analyzed 2026-11-14 — do not "fix" by tweaking one side.
+      (a) Product: `QDateTime::fromStdLocalTime` (src/core/datetime/qdatetime.h:362)
+      builds `QDateTime(1970-01-01, 00:00)` (local spec) and `addMSecs(count)`,
+      so the instant is resolved with the system zone's *1970* offset, not the
+      offset at the target wall time. Qt/std semantics: interpret the value as
+      wall time in the system local zone, DST-aware at that date (construct
+      `QDateTime(wallDate, wallTime, localZone)`). Header-inline, so the fix
+      recompiles most of CsCore — schedule it on its own, not mid-other-builds.
+      (b) Test: the constant `1698763505` is wall 2023-10-31 14:45:05, i.e. it
+      converts the America/Los_Angeles dt (15:45:05 PDT, UTC-7) using the
+      standard offset UTC-8 — one hour off. Even a correct (a) cannot make
+      this pass as written on any machine; the test needs its constant
+      recomputed (1698767105) and a Pacific system zone, or restructuring
+      to avoid depending on the OS zone at all.
 - [ ] Poll/finish the `CsScript` linked build in `build-vs2019-script-probe5`
       (artifacts already staged by `scripts/stage_probe_core_artifacts.ps1`)
 - [ ] `ports/go`: `go build ./...` + `go vet ./...`
