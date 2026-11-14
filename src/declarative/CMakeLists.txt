@@ -3,7 +3,8 @@ add_library(BTK::CsDeclarative ALIAS CsDeclarative)
 
 set_target_properties(CsDeclarative PROPERTIES OUTPUT_NAME CsDeclarative${BUILD_ABI})
 
-target_add_definitions(CsDeclarative
+target_compile_definitions(CsDeclarative
+   PRIVATE
    -DQT_BUILD_DECLARATIVE_LIB
 )
 
@@ -56,12 +57,21 @@ set_target_properties(CsDeclarative
    LINK_FLAGS ${EXTRA_DECLARATIVE_LDFLAGS}
 )
 
+target_sources(CsDeclarative
+   PRIVATE
+   ${DECLARATIVE_SOURCES}
+)
+
 target_link_libraries(CsDeclarative
    PRIVATE
    ${EXTRA_DECLARATIVE_LIBS}
+   CsCore
+   CsGui
+   CsNetwork
+   CsScript
 )
 
-function_generate_resources("${DECLARATIVE_SOURCES}")
+function_generate_resources(CsDeclarative)
 
 macro_generate_package(
    CsDeclarative

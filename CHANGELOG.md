@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.3.32 - 2026-11-14
+- Declarative/BML build system repaired (component can now configure;
+  compile verification in progress):
+  1. Top-level gate looked for `qscriptdeclarativeclass_p.h` in two stale
+     locations; the real header is `src/script/bridge/…` — gate fixed.
+  2. `src/declarative/CMakeLists.txt` used the nonexistent
+     `target_add_definitions` (now `target_compile_definitions`, matching
+     CsCore's form), never fed its accumulated `DECLARATIVE_SOURCES`
+     into the target, passed that list where `function_generate_resources`
+     expects a target name, and linked nothing. Now: `target_sources`,
+     `function_generate_resources(CsDeclarative)`, links
+     CsCore/CsGui/CsNetwork/CsScript.
+
 ## 0.3.31 - 2026-11-14
 - **CsScript lives**: the JavaScript engine now compiles, links, evaluates,
   and exits cleanly (verified: `1+2=3`, function calls, string ops, exit 0).

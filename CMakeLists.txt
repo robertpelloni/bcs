@@ -287,7 +287,7 @@ if (WITH_DECLARATIVE)
       string(APPEND BTK_DECLARATIVE_DISABLED_REASON "missing QtScript public headers (for example qscriptengine.h); ")
    endif()
 
-   if (NOT EXISTS "${CMAKE_SOURCE_DIR}/src/scripttools/debugging/qscriptdeclarativeclass_p.h" AND NOT EXISTS "${CMAKE_SOURCE_DIR}/src/script/qscriptdeclarativeclass_p.h")
+   if (NOT EXISTS "${CMAKE_SOURCE_DIR}/src/scripttools/debugging/qscriptdeclarativeclass_p.h" AND NOT EXISTS "${CMAKE_SOURCE_DIR}/src/script/qscriptdeclarativeclass_p.h" AND NOT EXISTS "${CMAKE_SOURCE_DIR}/src/script/bridge/qscriptdeclarativeclass_p.h")
       string(APPEND BTK_DECLARATIVE_DISABLED_REASON "missing qscriptdeclarativeclass_p.h support infrastructure; ")
    endif()
 
