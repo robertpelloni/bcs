@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;

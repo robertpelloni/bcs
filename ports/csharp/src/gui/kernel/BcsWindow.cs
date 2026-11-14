@@ -1,6 +1,6 @@
-using BCS.Core.Tools;
+using Bcs.Core.Tools;
 
-namespace BCS.Gui.Kernel {
+namespace Bcs.Gui.Kernel {
     // BcsWindow represents a top-level native window
     public class BcsWindow {
         public string Title { get; set; }

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace BCS.Network.Socket {
+namespace Bcs.Network.Socket {
     // BcsTcpSocket abstracts a network client connection for C#
     public class BcsTcpSocket {
         private TcpClient _client;

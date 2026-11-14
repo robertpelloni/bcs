@@ -1,11 +1,7 @@
 using System;
 
-namespace BCS.Core.Global {
-<<<<<<< HEAD
+namespace Bcs.Core.Global {
     // C# uses a GC, so BcsSharedPointer/BcsUniquePointer are semantic wrappers
-=======
-    // C# uses a GC, so BcsSharedPointer/BcsUniquePointer are semantic wrappers
->>>>>>> origin/master
     // or just direct object references. We provide a lightweight generic wrapper for parity.
     public class BcsSharedPointer<T> where T : class {
         public T Value { get; private set; }

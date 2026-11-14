@@ -1,8 +1,39 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 
-namespace BCS.Core.Kernel {
+namespace Bcs.Core.Kernel {
+    // EventType enumerates global event IDs modeled after C++ QEvent::Type.
+    // Values mirror ports/go (bcsevent.go); Child* are offset past User
+    // without colliding with it (the Go port collides at 1000 — do not copy that).
+    public enum EventType {
+        None = 0,
+        Timer = 1,
+        MouseButtonPress = 2,
+        MouseButtonRelease = 3,
+        MouseButtonDblClick = 4,
+        MouseMove = 5,
+        KeyPress = 6,
+        KeyRelease = 7,
+        FocusIn = 8,
+        FocusOut = 9,
+        Enter = 10,
+        Leave = 11,
+        Paint = 12,
+        Move = 13,
+        Resize = 14,
+        Create = 15,
+        Destroy = 16,
+        Show = 17,
+        Hide = 18,
+        Close = 19,
+        Quit = 20,
+        ApplicationActivate = 21,
+        ApplicationDeactivate = 22,
+        User = 1000,
+        ChildAdded = 1001,
+        ChildRemoved = 1002,
+        DynamicPropertyChange = 1003
+    }
+
     public class BcsEvent : IComparable<BcsEvent> {
         public int Type { get; set; }
         public int Priority { get; set; }
@@ -18,86 +49,31 @@ namespace BCS.Core.Kernel {
         }
     }
 
-    public class BcsObject {
-        public BcsObject Parent { get; set; }
-        public List<BcsObject> Children { get; set; }
-        private List<Func<BcsEvent, bool>> _eventFilters;
+    // Maps to C++ QTimerEvent: delivered to BcsObject.TimerEvent.
+    public class BcsTimerEvent : BcsEvent {
+        public int TimerId { get; private set; }
 
-        public BcsObject(BcsObject parent = null) {
-            Parent = parent;
-            Children = new List<BcsObject>();
-            _eventFilters = new List<Func<BcsEvent, bool>>();
-            if (parent != null) {
-                parent.Children.Add(this);
-            }
-        }
-
-        public void InstallEventFilter(Func<BcsEvent, bool> filter) {
-            _eventFilters.Add(filter);
-        }
-
-        public virtual bool Event(BcsEvent e) {
-            foreach (var filter in _eventFilters) {
-                if (filter(e)) {
-                    return true;
-                }
-            }
-            return false;
+        public BcsTimerEvent(int timerId, int priority = 0)
+            : base((int)EventType.Timer, priority) {
+            TimerId = timerId;
         }
     }
 
-    public class BcsEventLoop {
-        // In C# .NET 10+ we can use PriorityQueue, but for broader compatibility a BlockingCollection with a concurrent wrapper or custom wait is common.
-        // We'll use a BlockingCollection of a concurrent priority structure, or a simple Monitor over a PriorityQueue.
-        private PriorityQueue<BcsEvent, int> _queue;
-        private readonly object _lock = new object();
-        private bool _quit = false;
+    // Maps to C++ QChildEvent: delivered to BcsObject.ChildEvent.
+    public class BcsChildEvent : BcsEvent {
+        public BcsObject Child { get; private set; }
 
-        public BcsEventLoop() {
-            _queue = new PriorityQueue<BcsEvent, int>();
+        public bool Added {
+            get { return Type == (int)EventType.ChildAdded; }
         }
 
-        public void PostEvent(BcsEvent e) {
-            lock (_lock) {
-                // PriorityQueue dequeues lowest value first, so invert priority
-                _queue.Enqueue(e, -e.Priority);
-                System.Threading.Monitor.Pulse(_lock);
-            }
+        public bool Removed {
+            get { return Type == (int)EventType.ChildRemoved; }
         }
 
-        public void Exec() {
-            System.Threading.Monitor.Enter(_lock);
-            try {
-                while (!_quit) {
-                    while (_queue.Count == 0 && !_quit) {
-                        System.Threading.Monitor.Wait(_lock);
-                    }
-
-                    if (_quit) break;
-
-                    BcsEvent e = _queue.Dequeue();
-
-                    System.Threading.Monitor.Exit(_lock);
-                    try {
-                        // Dispatch event
-                    } catch (Exception) {
-                        // Handle dispatch exception
-                    } finally {
-                        System.Threading.Monitor.Enter(_lock);
-                    }
-                }
-            } finally {
-                if (System.Threading.Monitor.IsEntered(_lock)) {
-                    System.Threading.Monitor.Exit(_lock);
-                }
-            }
-        }
-
-        public void Quit() {
-            lock (_lock) {
-                _quit = true;
-                System.Threading.Monitor.PulseAll(_lock);
-            }
+        public BcsChildEvent(EventType type, BcsObject child, int priority = 0)
+            : base((int)type, priority) {
+            Child = child;
         }
     }
 }

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using BCS.Core.Kernel;
+using Bcs.Core.Kernel;
 
-namespace BCS.Gui.Kernel {
+namespace Bcs.Gui.Kernel {
     public enum ExclusionPolicy {
         None,
         Exclusive,

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace BCS.Core.IO {
+namespace Bcs.Core.IO {
     // BcsDir abstracts standard directory operations for C#
     public class BcsDir {
         private string _path;

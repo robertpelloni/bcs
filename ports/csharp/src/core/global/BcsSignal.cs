@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BCS.Core.Global {
+namespace Bcs.Core.Global {
     public class BcsSignal<T> {
         private readonly List<Action<T>> _listeners = new List<Action<T>>();
         private readonly object _lock = new object();

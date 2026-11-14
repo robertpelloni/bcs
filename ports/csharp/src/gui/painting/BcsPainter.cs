@@ -1,6 +1,6 @@
-using BCS.Core.Tools;
+using Bcs.Core.Tools;
 
-namespace BCS.Gui.Painting {
+namespace Bcs.Gui.Painting {
     // BcsPainter abstracts native hardware-accelerated and software drawing ops
     public class BcsPainter {
         public BcsPen Pen { get; set; }

@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -34,7 +34,7 @@ public class BcsEventDispatcher {
     public void stop() {
         running.set(false);
         // Post a dummy event to wake up the blocked take() call
-        postEvent(new BcsEvent(BcsEvent.EventType.None) {});
+        postEvent(new BcsEvent(EventType.None));
     }
 
     private void dispatchEvent(BcsEvent event) {

@@ -1,6 +1,6 @@
 using System;
 
-namespace BCS {
+namespace Bcs {
     class Program {
         static void Main(string[] args) {
             Console.WriteLine("BCS Framework - C# Port Initialization");

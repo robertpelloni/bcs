@@ -1,9 +1,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using BCS.Core.Global;
-using BCS.Core.Kernel;
+using Bcs.Core.Global;
+using Bcs.Core.Kernel;
 
-namespace BCS.Gui.Kernel {
+namespace Bcs.Gui.Kernel {
     public enum FocusScope {
         Widget, Window, Application, Workspace, Global
     }

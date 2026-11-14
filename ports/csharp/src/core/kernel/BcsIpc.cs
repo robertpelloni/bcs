@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace BCS.Core.Kernel {
+namespace Bcs.Core.Kernel {
     // BcsSystemSemaphore maps native Windows/Unix Semaphore concepts
     public class BcsSystemSemaphore {
         public string Key { get; private set; }

@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace BCS.Core.Containers {
+namespace Bcs.Core.Containers {
     // BcsMap maps to ConcurrentDictionary for thread-safe key-value storage
     public class BcsMap<K, V> {
         private ConcurrentDictionary<K, V> _items;

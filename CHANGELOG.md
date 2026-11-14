@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 0.3.27 - 2026-11-13
+- C# port builds and runs for the first time: added `ports/csharp/Bcs.csproj`
+  (0 warnings, 0 errors). Fixes required: committed merge-conflict markers
+  in `Bcs.cs`/`BcsPointer.cs` (both sides identical), the `BCS.*` vs `Bcs.*`
+  namespace split (33 files unified), duplicate stub classes hidden in
+  `BcsEvent.cs`/`BcsPen.cs`, missing `EventType`/`BcsTimerEvent`/
+  `BcsChildEvent` (added, mirroring Go/C++/Qt semantics), `Thread`
+  namespace collision, and event-loop API drift (`PostEvent`, optional
+  dispatcher). `BcsWidget` now routes mouse-release to a virtual handler.
+- Java port compiles and runs for the first time: unified `core.*` vs
+  `bcs.core.*` packages (27 files), added missing `EventType` enum,
+  removed duplicate `BcsBrush`, added dispatcher-backed `BcsEventLoop`
+  constructor + `int exec()`, `BcsObject.close()` teardown, and widget
+  mouse-release routing mirroring the C# fix.
+- `scripts/build-all.ps1` now builds all four ports and fails on any
+  committed merge-conflict markers in tracked files (new guard; the
+  HANDOFF.md conflict found by that sweep is also resolved).
+- HANDOFF.md: resolved the Phase 3–9 conflict block (kept the HEAD side).
+
 ## 0.3.26 - 2026-11-13
 - pushed v0.3.25 to origin/master using the workspace GitHub token
   (stored credential had expired; token itself never printed)

@@ -1,6 +1,6 @@
-package core.graphics;
+package bcs.core.graphics;
 
-import core.kernel.BcsObject;
+import bcs.core.kernel.BcsObject;
 
 public class BcsGraphicsTests {
     public static void testGraphicsLifecycle() {
@@ -8,7 +8,7 @@ public class BcsGraphicsTests {
         BcsCanvas canvas = new BcsCanvas(parent, 800, 600);
         BcsPainter painter = new BcsPainter(parent);
 
-        if (canvas.getParent() != parent) {
+        if (canvas.parent != parent) {
             throw new AssertionError("Parent mismatch");
         }
 

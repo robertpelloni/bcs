@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

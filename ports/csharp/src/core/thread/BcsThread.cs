@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BCS.Core.Thread {
+namespace Bcs.Core.Thread {
     // BcsThread abstracts thread execution, mapped to C# Tasks and Threads
     public class BcsThread {
         private Task _task;

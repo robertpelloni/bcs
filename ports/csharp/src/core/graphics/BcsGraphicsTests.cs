@@ -12,7 +12,7 @@ namespace Bcs.Core.Graphics.Tests
             var canvas = new BcsCanvas(parent, 800, 600);
             var painter = new BcsPainter(parent);
 
-            Debug.Assert(canvas.Parent() == parent);
+            Debug.Assert(canvas.Parent == parent);
             var (w, h) = canvas.Size();
             Debug.Assert(w == 800 && h == 600);
 

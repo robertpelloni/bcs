@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BCS.Core.Kernel {
+namespace Bcs.Core.Kernel {
     // BcsTimer provides a cross-platform high-level timer mapping to C++ QTimer natively using Task.Delay
     public class BcsTimer : BcsObject {
         private int _interval;

@@ -1,6 +1,6 @@
 using System;
 
-namespace BCS.Core.Global {
+namespace Bcs.Core.Global {
     public enum BcsGlobalColor {
         White,
         Black,
@@ -21,7 +21,7 @@ namespace BCS.Core.Global {
     }
 }
 
-namespace BCS.Core.Global {
+namespace Bcs.Core.Global {
     [System.Flags]
     public enum BcsAlignment {
         AlignLeft = 0x0001,

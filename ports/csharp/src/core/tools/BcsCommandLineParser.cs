@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using BCS.Core.Global;
+using Bcs.Core.Global;
 
-namespace BCS.Core.Tools {
+namespace Bcs.Core.Tools {
     public class BcsCommandLineOption {
         public BcsString Name { get; set; }
         public BcsString Description { get; set; }

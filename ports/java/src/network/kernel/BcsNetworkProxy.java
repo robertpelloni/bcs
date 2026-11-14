@@ -1,6 +1,6 @@
-package network.kernel;
+package bcs.network.kernel;
 
-import core.kernel.BcsObject;
+import bcs.core.kernel.BcsObject;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BcsNetworkProxy extends BcsObject {

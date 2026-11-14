@@ -1,7 +1,7 @@
 using System;
-using BCS.Core.Kernel;
+using Bcs.Core.Kernel;
 
-namespace BCS.Gui.Kernel {
+namespace Bcs.Gui.Kernel {
     // BcsApplication manages the GUI application's control flow
     public class BcsApplication : BcsObject {
         private BcsEventLoop _eventLoop;

@@ -1,11 +1,11 @@
-package network.kernel;
+package bcs.network.kernel;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
-import core.kernel.BcsObject;
+import bcs.core.kernel.BcsObject;
 
 public class BcsTcpSocket extends BcsObject {
     private Socket socket;
@@ -52,7 +52,10 @@ public class BcsTcpSocket extends BcsObject {
         }
     }
 
-    public void close() throws IOException {
+    // Narrows BcsObject.close(): socket IO errors are swallowed after
+    // teardown so cleanup can never fail halfway (matches Qt close()).
+    @Override
+    public void close() {
         lock.lock();
         try {
             if (socket != null && !socket.isClosed()) {
@@ -60,8 +63,11 @@ public class BcsTcpSocket extends BcsObject {
             }
             in = null;
             out = null;
+        } catch (IOException ignored) {
+            // Already closing; nothing useful to do with a close failure.
         } finally {
             lock.unlock();
         }
+        super.close();
     }
 }

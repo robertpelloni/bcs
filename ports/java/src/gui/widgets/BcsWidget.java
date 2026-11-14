@@ -41,7 +41,15 @@ public class BcsWidget extends bcs.core.kernel.BcsObject {
 
     @Override
     public boolean event(BcsEvent e) {
-        // Widget specific event routing
+        // Widget specific event routing (mirrors QWidget::event):
+        // typed handlers first, then the object-level fallback.
+        if (e.type == bcs.core.kernel.EventType.MouseButtonRelease.value) {
+            mouseReleaseEvent(e);
+            return true;
+        }
         return super.event(e);
     }
+
+    // Mirrors QWidget::mouseReleaseEvent; override in subclasses.
+    protected void mouseReleaseEvent(BcsEvent e) { }
 }

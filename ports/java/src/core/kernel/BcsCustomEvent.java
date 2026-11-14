@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 public class BcsCustomEvent extends BcsEvent {
     private final Object data;

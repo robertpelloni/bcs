@@ -1,6 +1,6 @@
 using System;
 
-namespace BCS.Core.Global {
+namespace Bcs.Core.Global {
     public class BcsString {
         private string _value;
 

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BCS.Core.Containers {
+namespace Bcs.Core.Containers {
     // BcsVector is mapped to C#'s native List<T> with framework-specific semantics
     public class BcsVector<T> {
         private List<T> _items;

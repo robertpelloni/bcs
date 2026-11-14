@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace BCS.Core.Thread {
+namespace Bcs.Core.Thread {
     // BcsMutex maps to C# Monitor/lock semantics
     public class BcsMutex {
         private readonly object _lockObj = new object();

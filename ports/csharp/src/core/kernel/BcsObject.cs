@@ -64,9 +64,14 @@ namespace Bcs.Core.Kernel
 
         public virtual bool Event(BcsEvent e)
         {
-            if (e.Type == EventType.Timer)
+            if (e.Type == (int)EventType.Timer)
             {
                 TimerEvent((BcsTimerEvent)e);
+                return true;
+            }
+            if (e.Type == (int)EventType.ChildAdded || e.Type == (int)EventType.ChildRemoved)
+            {
+                ChildEvent((BcsChildEvent)e);
                 return true;
             }
             return false;

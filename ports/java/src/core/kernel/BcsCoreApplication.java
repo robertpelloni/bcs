@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 public class BcsCoreApplication extends BcsObject {
     private static volatile BcsCoreApplication instance;

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace BCS.Core.IO {
+namespace Bcs.Core.IO {
     // BcsFile abstracts standard file I/O operations for C#
     public class BcsFile {
         private string _path;

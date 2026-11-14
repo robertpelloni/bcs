@@ -4,17 +4,32 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 public class BcsEventLoop {
     private PriorityBlockingQueue<BcsEvent> queue;
+    private final BcsEventDispatcher dispatcher;
     private volatile boolean quit = false;
 
     public BcsEventLoop() {
+        this(null, null);
+    }
+
+    // Dispatcher-backed loop (used by BcsKernel/BcsApplication).
+    public BcsEventLoop(BcsEventDispatcher dispatcher, BcsObject parent) {
         this.queue = new PriorityBlockingQueue<>(1024);
+        this.dispatcher = dispatcher;
     }
 
     public void postEvent(BcsEvent e) {
-        this.queue.put(e);
+        if (dispatcher != null) {
+            dispatcher.postEvent(e);
+        } else {
+            this.queue.put(e);
+        }
     }
 
-    public void exec() {
+    public int exec() {
+        if (dispatcher != null) {
+            dispatcher.exec();
+            return 0;
+        }
         try {
             while (!quit) {
                 BcsEvent e = this.queue.take();
@@ -23,6 +38,7 @@ public class BcsEventLoop {
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
+        return 0;
     }
 
     public void quit() {

@@ -1,7 +1,7 @@
 using System.IO;
-using BCS.Core.Global;
+using Bcs.Core.Global;
 
-namespace BCS.Core.IO {
+namespace Bcs.Core.IO {
     // BcsTextStream provides a convenient interface for reading and writing text.
     public class BcsTextStream {
         private StreamReader _reader;

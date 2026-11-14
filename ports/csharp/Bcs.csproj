@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>BCS</RootNamespace>
+    <AssemblyName>bcs</AssemblyName>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <!-- The port predates nullable/analyzer conventions; keep the build
+         honest but not noisy. Real warnings still show. -->
+    <NoWarn>$(NoWarn);CS0067;CS0649;CS0414;CS0169</NoWarn>
+  </PropertyGroup>
+
+  <!-- Sources live in Program.cs + src/**; the SDK default glob already
+       covers them. This file exists so `dotnet build` works at all:
+       previously the port had no project file (see ../../TODO.md). -->
+
+</Project>

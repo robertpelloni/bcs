@@ -63,6 +63,14 @@ foreach ($e in $entryPoints) {
     else { Write-Host "  [MISSING] $e"; $failures += "missing entry point: $e" }
 }
 
+Write-Host "== Merge-conflict marker guard =="
+# Committed conflict markers broke MEMORY.md, HANDOFF.md, and the C# port
+# in the past. Fail loudly if any tracked file (outside submodules) has them.
+$markerFiles = git -C $RepoRoot grep -l -e '^<<<<<<< ' -e '^>>>>>>> ' -- . ':(exclude)external' 2>$null
+if ($markerFiles) {
+    foreach ($f in $markerFiles) { Write-Host "  [CONFLICT] $f"; $failures += "conflict markers in $f" }
+} else { Write-Host "  [ok]      no conflict markers in tracked files" }
+
 Write-Host "== Toolchains =="
 $have = @{}
 foreach ($t in 'cmake','go','cargo','dotnet','java','python') { $have[$t] = Test-Tool $t }
@@ -78,12 +86,15 @@ if ($have['go'])    { Invoke-BelowNormal 'go'    @('build','./...') (Join-Path $
 else { $skipped += 'ports/go (no go)' }
 if ($have['cargo']) { Invoke-BelowNormal 'cargo' @('build') (Join-Path $RepoRoot 'ports\rust') 'ports/rust' }
 else { $skipped += 'ports/rust (no cargo)' }
-# ports/csharp has no .csproj yet (see TODO.md): report, do not fake a build.
-if (Test-Path (Join-Path $RepoRoot 'ports\csharp\*.csproj')) {
-    if ($have['dotnet']) { Invoke-BelowNormal 'dotnet' @('build') (Join-Path $RepoRoot 'ports\csharp') 'ports/csharp' }
-    else { $skipped += 'ports/csharp (no dotnet)' }
-} else { $skipped += 'ports/csharp (no .csproj yet - see TODO.md)' }
-$skipped += 'ports/java (no build file yet - see TODO.md)'
+if ($have['dotnet']) { Invoke-BelowNormal 'dotnet' @('build','--nologo','-v','q') (Join-Path $RepoRoot 'ports\csharp') 'ports/csharp' }
+else { $skipped += 'ports/csharp (no dotnet)' }
+if ($have['java']) {
+    $javaDir = Join-Path $RepoRoot 'ports\java'
+    $outDir = Join-Path $javaDir 'out'
+    if (-not (Test-Path $outDir)) { New-Item -ItemType Directory $outDir | Out-Null }
+    $sources = Get-ChildItem $javaDir -Recurse -Filter *.java | ForEach-Object { $_.FullName }
+    Invoke-BelowNormal 'javac' (@('-d','out') + $sources) $javaDir 'ports/java'
+} else { $skipped += 'ports/java (no javac)' }
 
 Write-Host "== C++ tools (existing build-vs2019 tree) =="
 # The checked-in build-vs2019 cache was configured at the old path

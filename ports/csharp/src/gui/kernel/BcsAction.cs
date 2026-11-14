@@ -1,7 +1,7 @@
 using System;
-using BCS.Core.Kernel;
+using Bcs.Core.Kernel;
 
-namespace BCS.Gui.Kernel {
+namespace Bcs.Gui.Kernel {
     // BcsAction represents an actionable item (e.g. in a menu or toolbar)
     public class BcsAction : BcsObject {
         public string Text { get; set; }

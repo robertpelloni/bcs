@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using BCS.Gui.Widgets;
+using Bcs.Gui.Widgets;
 
-namespace BCS.Gui.Layout {
+namespace Bcs.Gui.Layout {
     // BcsLayout governs spatial organization of UI components
     public class BcsLayout {
         protected List<BcsWidget> _children;

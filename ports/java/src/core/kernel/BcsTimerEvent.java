@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 public class BcsTimerEvent extends BcsEvent {
     private final int timerId;

@@ -1,7 +1,7 @@
-using BCS.Core.Kernel;
-using BCS.Core.Tools;
+using Bcs.Core.Kernel;
+using Bcs.Core.Tools;
 
-namespace BCS.Gui.Widgets {
+namespace Bcs.Gui.Widgets {
     // BcsWidget is the base class for all UI elements
     public class BcsWidget : BcsObject {
         public BcsRect Geometry { get; set; }
@@ -33,8 +33,16 @@ namespace BCS.Gui.Widgets {
         }
 
         public override bool Event(BcsEvent e) {
-            // Widget specific event routing
+            // Widget specific event routing (mirrors QWidget::event):
+            // typed handlers first, then the object-level fallback.
+            if (e.Type == (int)EventType.MouseButtonRelease) {
+                MouseReleaseEvent(e);
+                return true;
+            }
             return base.Event(e);
         }
+
+        // Mirrors QWidget::mouseReleaseEvent; override in subclasses.
+        protected virtual void MouseReleaseEvent(BcsEvent e) { }
     }
 }

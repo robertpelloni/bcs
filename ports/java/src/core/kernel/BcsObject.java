@@ -30,4 +30,17 @@ public class BcsObject {
         }
         return false;
     }
+
+    // Detach from parent and close children (mirrors QObject teardown order:
+    // children first, then unlink). Idempotent; safe to call more than once.
+    public void close() {
+        for (BcsObject child : new ArrayList<>(children)) {
+            child.close();
+        }
+        children.clear();
+        if (parent != null) {
+            parent.children.remove(this);
+            parent = null;
+        }
+    }
 }

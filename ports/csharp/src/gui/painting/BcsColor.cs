@@ -1,4 +1,4 @@
-namespace BCS.Gui.Painting {
+namespace Bcs.Gui.Painting {
     public enum ColorSpec {
         Invalid = 0,
         Rgb = 1,

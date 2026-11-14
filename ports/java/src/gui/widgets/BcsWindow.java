@@ -1,4 +1,4 @@
-package gui.widgets;
+package bcs.gui.widgets;
 
 import java.util.concurrent.locks.ReentrantLock;
 

@@ -13,11 +13,3 @@ public class BcsPen {
     }
 }
 
-// BcsBrush defines how shapes are filled
-class BcsBrush {
-    public BcsGlobalColor color;
-
-    public BcsBrush(BcsGlobalColor color) {
-        this.color = color;
-    }
-}

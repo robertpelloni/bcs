@@ -27,8 +27,14 @@
       (artifacts already staged by `scripts/stage_probe_core_artifacts.ps1`)
 - [ ] `ports/go`: `go build ./...` + `go vet ./...`
 - [ ] `ports/rust`: `cargo build` + `cargo test`
-- [ ] `ports/csharp`: add a `.csproj` so `dotnet build` works (none exists yet)
-- [ ] `ports/java`: document/add the one build command (`Main.java` + `src/`)
+- [x] `ports/csharp`: add a `.csproj` so `dotnet build` works — done 2026-11-13
+      (`Bcs.csproj`; builds 0 warnings/0 errors and runs). Required fixing
+      committed conflict markers, `BCS.*`/`Bcs.*` namespace split, duplicate
+      stub classes, and a missing `EventType`/`BcsTimerEvent`/`BcsChildEvent`.
+- [x] `ports/java`: document/add the one build command — done 2026-11-13
+      (`javac -d out` over `Main.java` + `src/**`, wired into
+      `scripts/build-all.ps1`; compiles and runs). Required unifying
+      `core.*`/`bcs.core.*` packages and adding `EventType`.
 
 ## Docs & dashboard
 

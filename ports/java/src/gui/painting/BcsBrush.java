@@ -1,6 +1,6 @@
-package gui.painting;
+package bcs.gui.painting;
 
-import core.kernel.BcsObject;
+import bcs.core.kernel.BcsObject;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BcsBrush extends BcsObject {

@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 public class BcsDynamicPropertyChangeEvent extends BcsEvent {
     private final byte[] propertyName;

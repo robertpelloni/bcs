@@ -9,9 +9,15 @@ namespace Bcs.Core.Kernel
         private bool _isRunning = false;
         private int _quitCode = 0;
 
-        public BcsEventLoop(BcsEventDispatcher dispatcher, BcsObject parent = null) : base(parent)
+        public BcsEventLoop(BcsEventDispatcher dispatcher = null, BcsObject parent = null) : base(parent)
         {
             EventDispatcher = dispatcher ?? new BcsEventDispatcher();
+        }
+
+        // Queue an event for dispatch (mirrors QCoreApplication::postEvent's loop side).
+        public void PostEvent(BcsEvent e)
+        {
+            EventDispatcher.PostEvent(e);
         }
 
         public int Exec()

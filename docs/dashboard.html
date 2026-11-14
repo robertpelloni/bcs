@@ -83,8 +83,8 @@
   <tr><th>Port</th><th>Build</th><th>State</th></tr>
   <tr><td>Go (<code>ports/go</code>)</td><td><code>go build ./...</code></td><td>Builds, vets clean; entry point runs. Kernel types, arbitrator, TCP server ported.</td></tr>
   <tr><td>Rust (<code>ports/rust</code>)</td><td><code>cargo build</code></td><td>Builds (1 dead-field warning); <code>cargo test</code> runs — 0 tests written yet.</td></tr>
-  <tr><td>C# (<code>ports/csharp</code>)</td><td>—</td><td>Source present (<code>Program.cs</code> + <code>src/</code>); no <code>.csproj</code> yet, so <code>dotnet build</code> cannot run. See TODO.md.</td></tr>
-  <tr><td>Java (<code>ports/java</code>)</td><td>—</td><td>Source present (<code>Main.java</code> + <code>src/</code>); no build file yet. See TODO.md.</td></tr>
+  <tr><td>C# (<code>ports/csharp</code>)</td><td><code>dotnet build</code></td><td>Builds 0 warnings / 0 errors and runs (<code>Bcs.csproj</code> added; namespaces unified).</td></tr>
+  <tr><td>Java (<code>ports/java</code>)</td><td><code>javac -d out …</code> (via build-all)</td><td>Compiles and runs (packages unified to <code>bcs.*</code>; <code>EventType</code> added).</td></tr>
 </table>
 <p style="font-family:Verdana,sans-serif;font-size:12.5px;color:#333d4d">Every ported widget carries <code>Label</code> / <code>Description</code> / <code>Tooltip</code>
 <span class="tip" title="Project rule (VISION.md): a backend feature without a labeled, described, tooltip'd UI surface is unfinished.">ⓘ</span> by design.</p>

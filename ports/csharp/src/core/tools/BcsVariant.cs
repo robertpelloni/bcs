@@ -1,4 +1,4 @@
-namespace BCS.Core.Tools {
+namespace Bcs.Core.Tools {
     // BcsVariant acts as a dynamic type wrapper mapping natively to C#'s `object`
     public class BcsVariant {
         public object Value { get; set; }

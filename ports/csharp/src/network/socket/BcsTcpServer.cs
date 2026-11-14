@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace BCS.Network.Socket {
+namespace Bcs.Network.Socket {
     // BcsTcpServer abstracts a network listener socket for C#
     public class BcsTcpServer {
         private TcpListener _listener;

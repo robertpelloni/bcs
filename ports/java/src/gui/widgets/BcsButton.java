@@ -1,6 +1,6 @@
-package gui.widgets;
+package bcs.gui.widgets;
 
-import core.kernel.BcsEvent;
+import bcs.core.kernel.BcsEvent;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BcsButton extends BcsWidget {

@@ -1,7 +1,7 @@
-package core.graphics;
+package bcs.core.graphics;
 
 import java.util.concurrent.locks.ReentrantLock;
-import core.kernel.BcsObject;
+import bcs.core.kernel.BcsObject;
 
 public class BcsPainter extends BcsObject {
     private BcsCanvas canvas;

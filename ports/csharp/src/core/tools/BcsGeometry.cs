@@ -1,4 +1,4 @@
-namespace BCS.Core.Tools {
+namespace Bcs.Core.Tools {
     // BcsPoint defines an X/Y coordinate
     public struct BcsPoint {
         public int X { get; set; }

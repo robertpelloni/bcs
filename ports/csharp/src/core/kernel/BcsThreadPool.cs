@@ -8,7 +8,7 @@ namespace Bcs.Core.Kernel
     public class BcsThreadPool : BcsObject
     {
         private BlockingCollection<Action> _tasks;
-        private List<Thread> _workers;
+        private List<System.Threading.Thread> _workers;
         private CancellationTokenSource _cts;
         private bool _isShutdown;
         private readonly object _lock = new object();
@@ -17,12 +17,12 @@ namespace Bcs.Core.Kernel
         {
             _tasks = new BlockingCollection<Action>();
             _cts = new CancellationTokenSource();
-            _workers = new List<Thread>(numWorkers);
+            _workers = new List<System.Threading.Thread>(numWorkers);
             _isShutdown = false;
 
             for (int i = 0; i < numWorkers; i++)
             {
-                var thread = new Thread(WorkerLoop);
+                var thread = new System.Threading.Thread(WorkerLoop);
                 thread.IsBackground = true;
                 thread.Start();
                 _workers.Add(thread);

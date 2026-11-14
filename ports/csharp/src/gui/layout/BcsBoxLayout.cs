@@ -1,4 +1,4 @@
-namespace BCS.Gui.Layout {
+namespace Bcs.Gui.Layout {
     public enum BcsDirection {
         Horizontal,
         Vertical

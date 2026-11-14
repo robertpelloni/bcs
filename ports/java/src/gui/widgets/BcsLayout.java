@@ -1,9 +1,9 @@
-package gui.widgets;
+package bcs.gui.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
-import core.kernel.BcsObject;
+import bcs.core.kernel.BcsObject;
 
 public class BcsLayout extends BcsObject {
     private final List<BcsWidget> widgets;

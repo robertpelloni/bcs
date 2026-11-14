@@ -1,6 +1,6 @@
-using BCS.Core.Global;
+using Bcs.Core.Global;
 
-namespace BCS.Gui.Painting {
+namespace Bcs.Gui.Painting {
     // BcsPen defines how lines and outlines are drawn
     public class BcsPen {
         public BcsGlobalColor Color { get; set; }
@@ -9,15 +9,6 @@ namespace BCS.Gui.Painting {
         public BcsPen(BcsGlobalColor color, int width = 1) {
             Color = color;
             Width = width;
-        }
-    }
-
-    // BcsBrush defines how shapes are filled
-    public class BcsBrush {
-        public BcsGlobalColor Color { get; set; }
-
-        public BcsBrush(BcsGlobalColor color) {
-            Color = color;
         }
     }
 }

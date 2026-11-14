@@ -8,6 +8,10 @@ public class BcsEvent implements Comparable<BcsEvent> {
         this(type, 0);
     }
 
+    public BcsEvent(EventType type) {
+        this(type.value, 0);
+    }
+
     public BcsEvent(int type, int priority) {
         this.type = type;
         this.priority = priority;

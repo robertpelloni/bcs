@@ -1,4 +1,4 @@
-package core.kernel;
+package bcs.core.kernel;
 
 public class BcsChildEvent extends BcsEvent {
     private final Object child; // Maps to BcsObject

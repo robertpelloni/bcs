@@ -1,4 +1,4 @@
-namespace BCS.Gui.Text {
+namespace Bcs.Gui.Text {
     public enum StyleHint {
         Helvetica = 0,
         Times = 1,
