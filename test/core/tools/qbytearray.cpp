@@ -57,13 +57,15 @@ TEST_CASE("QByteArray append", "[qbytearray]")
 
 TEST_CASE("QByteArray chop", "[qbytearray]")
 {
-   QByteArray str("BTK");
+   // 11-char fixture: the rebrand had shortened this to "BTK", which no
+   // longer matched the chop expectations below.
+   QByteArray str("ABCDEFGHIJK");
 
    SECTION("a")
    {
       str.chop(5);
 
-      REQUIRE(str == "Copper");
+      REQUIRE(str == "ABCDEF");
    }
 
    SECTION("b")
@@ -246,22 +248,22 @@ TEST_CASE("QByteArray count", "[qbytearray]")
 
 TEST_CASE("QByteArray data", "[qbytearray]")
 {
-   QByteArray str("BTK");
+   QByteArray str("ABCDEFGHIJK");
 
    SECTION("a")
    {
      char *ptr = str.data();
 
      REQUIRE(ptr != nullptr);
-     REQUIRE(std::string(ptr) == "BTK");
+     REQUIRE(std::string(ptr) == "ABCDEFGHIJK");
    }
 
    SECTION("b")
    {
      char *ptr = str.data();
-     ptr[0] = 'c';
+     ptr[0] = 'a';
 
-     REQUIRE(str == "copperSpice");
+     REQUIRE(str == "aBCDEFGHIJK");
    }
 }
 
@@ -480,7 +482,7 @@ TEST_CASE("QByteArray reserve", "[qbytearray]")
 
 TEST_CASE("QByteArray resize", "[qbytearray]")
 {
-   QByteArray str("BTK");
+   QByteArray str("ABCDEFGHIJK");
 
    //
    str.resize(15);
@@ -488,8 +490,8 @@ TEST_CASE("QByteArray resize", "[qbytearray]")
    REQUIRE(str.size() == 15);
    REQUIRE(str.length() == 15);
 
-   REQUIRE(str[0]  == 'C');
-   REQUIRE(str[10] == 'e');
+   REQUIRE(str[0]  == 'A');
+   REQUIRE(str[10] == 'K');
 
    //
    str.resize(5);
@@ -497,8 +499,8 @@ TEST_CASE("QByteArray resize", "[qbytearray]")
    REQUIRE(str.size() == 5);
    REQUIRE(str.length() == 5);
 
-   REQUIRE(str[0] == 'C');
-   REQUIRE(str[4] == 'e');
+   REQUIRE(str[0] == 'A');
+   REQUIRE(str[4] == 'E');
 }
 
 TEST_CASE("QByteArray simplified", "[qbytearray]")

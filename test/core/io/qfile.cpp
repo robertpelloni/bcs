@@ -132,7 +132,7 @@ TEST_CASE("QFile read", "[qfile]")
    QTemporaryFile tmpFile(str);
    tmpFile.open();
 
-   tmpFile.write("BTK", 11);
+   tmpFile.write("BTK", 3);
 
    REQUIRE((tmpFile.permissions() & QFileDevice::ReadOwner)  == QFileDevice::ReadOwner);
    REQUIRE((tmpFile.permissions() & QFileDevice::WriteOwner) == QFileDevice::WriteOwner);

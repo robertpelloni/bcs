@@ -1919,20 +1919,15 @@ TEST_CASE("QVariant constructor_double", "[qvariant]")
 
 TEST_CASE("QVariant constructor_bytearray", "[qvariant]")
 {
-   QByteArray value(11, ' ');
+   // "BTK" + NUL (4 bytes): expectations below compare against
+   // QByteArray("BTK") + '\0'. The rebrand left this spelling the old
+   // 11-char name while the expectations were shortened.
+   QByteArray value(4, ' ');
 
-   value[0]  = 'C';
-   value[1]  = 'o';
-   value[2]  = 'p';
-   value[3]  = 'p';
-   value[4]  = 'e';
-   value[5]  = 'r';
-   value[6]  = 'S';
-   value[7]  = 'p';
-   value[8]  = 'i';
-   value[9]  = 'c';
-   value[10] = 'e';
-   value[11] = '\0';
+   value[0] = 'B';
+   value[1] = 'T';
+   value[2] = 'K';
+   value[3] = '\0';
 
    QVariant data = value;
 
