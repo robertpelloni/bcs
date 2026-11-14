@@ -39,9 +39,15 @@ powershell -ExecutionPolicy Bypass -File scripts\build-all.ps1 -CheckOnly
 
 ## 3. C++ framework (manual)
 
+> **Compile-time warning:** without `/MP`, MSBuild compiles each library's
+> sources serially and a full build takes many hours. Always configure with
+> `-DCMAKE_CXX_FLAGS=/MP8` (8 compiler processes; raise on bigger machines).
+> For test-only purposes the `Debug` configuration compiles several times
+> faster than `Release` (`--config Debug`) with identical test semantics.
+
 ```powershell
 # Configure (Release, tests optional) into the existing VS2019 tree:
-cmake -S . -B build-vs2019 -DBUILD_TESTS=ON
+cmake -S . -B build-vs2019 -DBUILD_TESTS=ON -DCMAKE_CXX_FLAGS=/MP8
 # Build, below normal priority:
 $p = Start-Process cmake -ArgumentList '--build','build-vs2019','--config','Release' -PassThru
 $p.PriorityClass = 'BelowNormal'; $p.WaitForExit()
