@@ -865,6 +865,10 @@ QScriptEnginePrivate::~QScriptEnginePrivate()
    detachAllRegisteredScriptStrings();
    qDeleteAll(m_qobjectData);
    qDeleteAll(m_typeInfos);
+   // Mirror JSGlobalContextRelease teardown: builtin Strong<Structure>
+   // handles must be released while the handle heap is still alive,
+   // otherwise ~JSGlobalData deallocates into a destroyed heap.
+   globalData->clearBuiltinStructures();
    globalData->heap.destroy();
    globalData->deref();
 

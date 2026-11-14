@@ -2143,7 +2143,7 @@ QObjectPrototype::QObjectPrototype(JSC::ExecState *exec, JSC::Structure *structu
    this->structure()->setHasGetterSetterProperties(true);
 }
 
-const JSC::ClassInfo QMetaObjectWrapperObject::info = { "QMetaObject", nullptr, nullptr, nullptr };
+const JSC::ClassInfo QMetaObjectWrapperObject::info = { "QMetaObject", &JSC::JSObject::s_info, nullptr, nullptr };
 
 QMetaObjectWrapperObject::QMetaObjectWrapperObject(
    JSC::ExecState *exec, const QMetaObject *metaObject, JSC::JSValue ctor,

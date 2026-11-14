@@ -29,8 +29,9 @@ ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScriptObject));
 ASSERT_CLASS_FITS_IN_CELL(QT_PREPEND_NAMESPACE(QScriptObjectPrototype));
 }
 
-// masquerading as JSC::JSObject
-const JSC::ClassInfo QScriptObject::info = { "Object", nullptr, nullptr, nullptr };
+// masquerading as JSC::JSObject; parent must still chain to JSObject::s_info
+// or the JSObject constructor's inherits() assertion fails (newer JSC).
+const JSC::ClassInfo QScriptObject::info = { "Object", &JSC::JSObject::s_info, nullptr, nullptr };
 
 QScriptObject::Data::~Data()
 {

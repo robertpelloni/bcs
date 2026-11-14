@@ -821,6 +821,10 @@ if (BUILD_TESTS)
    add_subdirectory(test/core)
    add_subdirectory(test/gui)
    add_subdirectory(test/network)
+
+   if (WITH_SCRIPT)
+      add_subdirectory(test/script)
+   endif()
 endif()
 
 foreach(component ${BUILD_COMPONENTS})

@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## 0.3.31 - 2026-11-14
+- **CsScript lives**: the JavaScript engine now compiles, links, evaluates,
+  and exits cleanly (verified: `1+2=3`, function calls, string ops, exit 0).
+  Three Stage-A defects were blocking it:
+  1. `wtf/PageBlock.cpp` was missing from the link (`QTWTF::pageSize`
+     unresolved) — added to `src/script/CMakeLists.txt`.
+  2. Masquerading `ClassInfo` entries (`QScriptObject`,
+     `QMetaObjectWrapperObject`, `QScriptActivationObject`,
+     `QScriptStaticScopeObject`) had no parent chain, tripping the
+     JSObject constructor `inherits()` assertion at engine startup —
+     now parented to `JSObject::s_info` / `JSVariableObject::s_info`.
+  3. `QScriptEnginePrivate` teardown never called
+     `clearBuiltinStructures()`, so builtin `Strong<Structure>` handles
+     were deallocated into an already-destroyed heap (crash on exit) —
+     now mirrors the `JSGlobalContextRelease` order.
+- Added maintained regression test `test/script/smoke_script.cpp`
+  (`CsScriptSmoke`, built when `WITH_SCRIPT=ON`, run via ctest; passes).
+- Configure a Script tree with:
+  `cmake -S . -B build-script -DWITH_SCRIPT=ON -DCMAKE_CXX_FLAGS=/MP8`
+  (Debug config recommended; amd64 MSBuild).
+
 ## 0.3.30 - 2026-11-14
 - GUI + Network suites now run: CsGui (Debug, /MP8, amd64 MSBuild —
   the 32-bit node OOMs on warning volume) and CsNetwork build;

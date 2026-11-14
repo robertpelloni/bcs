@@ -15,7 +15,8 @@
 
 ## M2 — Script + declarative revival
 
-- [ ] `CsScript` (JavaScriptCore-derived engine) links and runs, not just compiles
+- [x] `CsScript` (JavaScriptCore-derived engine) links and runs, not just
+      compiles — done 2026-11-14 (v0.3.31); regression test `CsScriptSmoke`
 - [ ] BML declarative runtime (`src/declarative`) builds against the revived engine
 - [ ] Script API manifest + JSCore drift audits regenerated and checked in
       (`scripts/generate_bml_script_manifest.py`,

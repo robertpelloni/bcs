@@ -33,7 +33,7 @@ namespace JSC {
 
 namespace QScript {
 
-const JSC::ClassInfo QScriptActivationObject::info = { "QScriptActivationObject", nullptr, nullptr, nullptr };
+const JSC::ClassInfo QScriptActivationObject::info = { "QScriptActivationObject", &JSC::JSVariableObject::s_info, nullptr, nullptr };
 
 QScriptActivationObject::QScriptActivationObject(JSC::ExecState *callFrame, JSC::JSObject *delegate)
    : JSC::JSVariableObject(callFrame->globalData(), callFrame->globalData().activationStructure.get(), &m_symbolTable, callFrame->registers()),
