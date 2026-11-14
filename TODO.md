@@ -21,8 +21,11 @@
 
 - [ ] Verify the full C++ build on `master` after the rebrand
       (configure `build-vs2019`, build `Release`, below-normal priority)
-- [ ] Build with `-DBUILD_TESTS=ON` and run Catch2: `test/core` (94 files),
-      `test/gui`, `test/network`
+- [x] Build with `-DBUILD_TESTS=ON` and run Catch2 core: **1081/1082 pass**
+      (ctest needs `build\bin\Release` on PATH — see CHANGELOG 0.3.28)
+- [ ] Run Catch2 `test/gui` + `test/network` (build in progress in `build/`)
+- [ ] `QDateTime std_chrono` fails on non-Pacific Windows zones
+      (fromStdLocalTime DST handling) — investigate or run on a Pacific machine
 - [ ] Poll/finish the `CsScript` linked build in `build-vs2019-script-probe5`
       (artifacts already staged by `scripts/stage_probe_core_artifacts.ps1`)
 - [ ] `ports/go`: `go build ./...` + `go vet ./...`

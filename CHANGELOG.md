@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## 0.3.28 - 2026-11-13
+- C++ test baseline established: fresh `build/` (VS2026/MSVC 19.52)
+  configures, `CsCoreTest` runs under ctest: **1081 passed, 1 failed**
+  (of 1082). Note: ctest must run with `build\bin\Release` on PATH or
+  every test fails instantly with DLL-not-found (0xC0000135).
+- Fixed 5 rebrand-corrupted test fixtures (test data shortened from the
+  11-char "CopperSpice" to "BTK" without updating lengths/indices):
+  `QByteArray chop/data/resize` (neutral 11-char fixture),
+  `QFile read` (wrote 11 bytes of a 3-byte literal — out-of-bounds read),
+  `QVariant constructor_bytearray` (data spelled the old name).
+  All 5 now pass.
+- Known failure (documented, not hidden): `QDateTime std_chrono` is
+  sensitive to the machine Windows time-zone/DST handling; fails on this
+  Eastern machine regardless of the TZ env var. Needs a Pacific-zone
+  machine or a fromStdLocalTime investigation to resolve.
+- Naming audit now passes (0 violations): `check_btk_naming.py` prunes
+  `build*` trees instead of double-reporting generated header copies.
+- All local branches fast-forwarded to `master`; `main` and `master`
+  pushed and in sync on origin.
+
 ## 0.3.27 - 2026-11-13
 - C# port builds and runs for the first time: added `ports/csharp/Bcs.csproj`
   (0 warnings, 0 errors). Fixes required: committed merge-conflict markers
