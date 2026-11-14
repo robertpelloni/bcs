@@ -1,5 +1,5 @@
 use crate::core::kernel::bcs_event::{BcsEventLoop, BcsObject, BcsEvent};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::rc::Rc;
 use std::cell::RefCell;
 
