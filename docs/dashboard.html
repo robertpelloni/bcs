@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BTK — Project Dashboard</title>
+<style>
+  :root { --ink:#1c2430; --mut:#5a6577; --line:#d8dde6; --bg:#f4f5f7; --card:#fff; --accent:#0f6b4f; --warn:#9a5b00; --bad:#a4262c; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family: Georgia, 'Times New Roman', serif; }
+  header { background:var(--ink); color:#f2f4f8; padding:28px 32px 22px; }
+  header h1 { margin:0 0 6px; font-size:30px; font-weight:normal; letter-spacing:.2px; }
+  header p { margin:0; color:#c3ccd9; font-family: Verdana, Geneva, sans-serif; font-size:13px; max-width:70ch; line-height:1.55; }
+  main { max-width:1060px; margin:0 auto; padding:26px 20px 48px; }
+  h2 { font-size:19px; font-weight:normal; border-bottom:2px solid var(--ink); padding-bottom:6px; margin:34px 0 14px; }
+  h2:first-of-type { margin-top:6px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:14px 16px; }
+  .card h3 { margin:0 0 5px; font-size:16px; font-weight:bold; font-family: Verdana, Geneva, sans-serif; }
+  .card p, .card li { font-family: Verdana, Geneva, sans-serif; font-size:12.5px; line-height:1.6; color:#333d4d; }
+  .card p { margin:0; }
+  .tip { color:var(--accent); cursor:help; font-size:12px; vertical-align:super; }
+  .pill { display:inline-block; font-family:Verdana,sans-serif; font-size:10.5px; padding:1px 8px; border-radius:9px; border:1px solid var(--line); color:var(--mut); margin-left:6px; vertical-align:2px; }
+  .ok { color:var(--accent); border-color:var(--accent); } .warn { color:var(--warn); border-color:var(--warn); } .bad { color:var(--bad); border-color:var(--bad); }
+  code { font-family: Consolas, 'Courier New', monospace; font-size:12px; background:#eef0f3; padding:0 4px; border-radius:3px; }
+  table { border-collapse:collapse; width:100%; background:var(--card); font-family:Verdana,sans-serif; font-size:12.5px; }
+  th, td { border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top; line-height:1.5; }
+  th { background:#eceff3; font-weight:bold; }
+  footer { color:var(--mut); font-family:Verdana,sans-serif; font-size:11.5px; margin-top:36px; line-height:1.6; }
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>BTK Project Dashboard</h1>
+  <p>One page for the whole BCS/BTK framework: every module, tool, language port, test suite, and workflow —
+     grouped by value, highest first. This repo is a C++ framework, not a web app: this page is a static
+     status board (no server). The product web dashboard (OmniDash) lives in the <code>bqt</code> submodule.</p>
+</header>
+<main>
+
+<h2>1 · Status &amp; how to run</h2>
+<div class="grid">
+  <div class="card"><h3>Build everything <span class="tip" title="Runs ports first (Go, Rust), then C++ tools if the tree is usable. Heavy processes run below normal priority so the machine stays responsive.">ⓘ</span></h3>
+    <p><code>powershell -File scripts\build-all.ps1</code> — one command. Fast check without compiling:
+    <code>scripts\build-all.ps1 -CheckOnly</code>.</p></div>
+  <div class="card"><h3>Run the demo entry point</h3>
+    <p><code>start.bat</code> runs the Go port (<code>ports\go</code>) and prints
+    “BCS Framework – Go Port Initialization”. The C++ framework is a library — downstream apps run it, not this repo.</p></div>
+  <div class="card"><h3>Run the tests <span class="tip" title="Catch2 suites are off by default (BUILD_TESTS=OFF). A build without them proves compilation, not correctness.">ⓘ</span></h3>
+    <p>Configure with <code>-DBUILD_TESTS=ON</code>, then
+    <code>ctest --test-dir build -C Release --output-on-failure</code>.</p></div>
+  <div class="card"><h3>Current health (2026-11-13) <span class="tip" title="Verified this session by running the commands, not copied from old logs.">ⓘ</span></h3>
+    <p>Go build+vet: pass · Rust build: pass (1 warning) · Fresh C++ configure: pass (after export fix) ·
+    Prebuilt tools in <code>build-vs2019\bin\Release</code>: run · C# / Java ports: source only, no build file yet.</p></div>
+</div>
+
+<h2>2 · Framework modules (C++, <code>src/</code>)</h2>
+<div class="grid">
+  <div class="card"><h3>BtkCore <span class="pill ok">highest value</span></h3><p>Object model, signals/slots, threading, IO, timers, properties. Everything else stands on this. Header: <code>&lt;btkcore.h&gt;</code>.</p></div>
+  <div class="card"><h3>BtkGui <span class="pill ok">highest value</span></h3><p>Widgets, painting, input, windowing, focus — plus multi-user ownership, the feature no rival framework has. Header: <code>&lt;btkgui.h&gt;</code>.</p></div>
+  <div class="card"><h3>BtkNetwork</h3><p>TCP/UDP sockets, HTTP, SSL/TLS, DNS, proxies. Header: <code>&lt;btknetwork.h&gt;</code>.</p></div>
+  <div class="card"><h3>BtkMultimedia</h3><p>Audio, video, camera, media playback. Header: <code>&lt;btkmultimedia.h&gt;</code>.</p></div>
+  <div class="card"><h3>BtkSql</h3><p>Database access with driver plugins (SQLite, ODBC; PostgreSQL/MySQL when SDKs are present). Header: <code>&lt;btksql.h&gt;</code>.</p></div>
+  <div class="card"><h3>BtkWebKit</h3><p>Embedded web browser engine. Header: <code>&lt;btkwebkit.h&gt;</code>.</p></div>
+  <div class="card"><h3>BtkSvg · BtkOpenGL · BtkVulkan</h3><p>SVG rendering; OpenGL rendering; Vulkan rendering (needs the Vulkan SDK ≥ 1.2.170 — not present on this machine, so it is skipped at configure time).</p></div>
+  <div class="card"><h3>BtkXml · BtkXmlPatterns</h3><p>DOM/SAX XML, stream readers/writers; XQuery, XPath, schema validation.</p></div>
+  <div class="card"><h3>BML declarative UI <span class="tip" title="BTK Markup Language runtime in src/declarative over the CsScript engine in src/script. Currently the revival frontier: compiles, link/staging in progress.">ⓘ</span> <span class="pill warn">in revival</span></h3><p>Declarative UI runtime (<code>src/declarative</code>) + script engine (<code>src/script</code>). See HANDOFF.md for the current frontier.</p></div>
+</div>
+
+<h2>3 · Tools (<code>src/tools/</code>, built to <code>bin/Release/</code>)</h2>
+<table>
+  <tr><th>Tool</th><th>What it does</th><th>UI</th></tr>
+  <tr><td><code>uic</code></td><td>Compiles <code>.ui</code> designer files to C++ headers</td><td>CLI</td></tr>
+  <tr><td><code>rcc</code></td><td>Compiles resource files (<code>.qrc</code>) into binaries</td><td>CLI</td></tr>
+  <tr><td><code>lupdate</code> · <code>lrelease</code> · <code>lconvert</code></td><td>Extract translatable strings · compile translations · convert translation formats</td><td>CLI</td></tr>
+  <tr><td><code>linguist</code></td><td>Translator's editor for language files — the only GUI tool in this repo</td><td>GUI</td></tr>
+</table>
+
+<h2>4 · Language ports (<code>ports/</code>) — same semantics, four languages</h2>
+<table>
+  <tr><th>Port</th><th>Build</th><th>State</th></tr>
+  <tr><td>Go (<code>ports/go</code>)</td><td><code>go build ./...</code></td><td>Builds, vets clean; entry point runs. Kernel types, arbitrator, TCP server ported.</td></tr>
+  <tr><td>Rust (<code>ports/rust</code>)</td><td><code>cargo build</code></td><td>Builds (1 dead-field warning); <code>cargo test</code> runs — 0 tests written yet.</td></tr>
+  <tr><td>C# (<code>ports/csharp</code>)</td><td>—</td><td>Source present (<code>Program.cs</code> + <code>src/</code>); no <code>.csproj</code> yet, so <code>dotnet build</code> cannot run. See TODO.md.</td></tr>
+  <tr><td>Java (<code>ports/java</code>)</td><td>—</td><td>Source present (<code>Main.java</code> + <code>src/</code>); no build file yet. See TODO.md.</td></tr>
+</table>
+<p style="font-family:Verdana,sans-serif;font-size:12.5px;color:#333d4d">Every ported widget carries <code>Label</code> / <code>Description</code> / <code>Tooltip</code>
+<span class="tip" title="Project rule (VISION.md): a backend feature without a labeled, described, tooltip'd UI surface is unfinished.">ⓘ</span> by design.</p>
+
+<h2>5 · Tests (<code>test/</code>, Catch2)</h2>
+<div class="grid">
+  <div class="card"><h3>test/core</h3><p>94 Catch2 files: containers, string, kernel, IO, JSON, threading, locale, XML… The main correctness gate.</p></div>
+  <div class="card"><h3>test/gui</h3><p>Kernel + text suites for the GUI module.</p></div>
+  <div class="card"><h3>test/network</h3><p>Access, kernel, and socket suites.</p></div>
+</div>
+
+<h2>6 · Workflows &amp; docs</h2>
+<table>
+  <tr><th>Workflow</th><th>Command</th></tr>
+  <tr><td>API inventory</td><td><code>python scripts\generate_btk_api_inventory.py</code></td></tr>
+  <tr><td>BML script manifest / dependency audit</td><td><code>python scripts\generate_bml_script_manifest.py</code> · <code>generate_bml_qtscript_dependency_audit.py</code></td></tr>
+  <tr><td>CsScript ↔ JavaScriptCore drift audit</td><td><code>python scripts\generate_csscript_jscore_drift_audit.py</code></td></tr>
+  <tr><td>Naming audit</td><td><code>python scripts\check_btk_naming.py</code></td></tr>
+  <tr><td>Docs set</td><td>VISION.md · ROADMAP.md · TODO.md · DEPLOY.md · IDEAS.md · MEMORY.md · HANDOFF.md · CHANGELOG.md (version: VERSION file)</td></tr>
+</table>
+
+<h2>7 · Known gaps (honest list)</h2>
+<div class="grid">
+  <div class="card"><h3>No system-tray app <span class="tip" title="Framework support exists (src/gui/util/qsystemtrayicon). No app in this repo creates one, and there are no servers here to quit. Candidate recorded in IDEAS.md.">ⓘ</span></h3><p>Nothing long-running ships in this repo, so there is no tray icon and no Quit-servers menu. By design, not by omission.</p></div>
+  <div class="card"><h3>Old build tree is path-stale</h3><p><code>build-vs2019</code> was configured when the repo lived at <code>…\workspace\btk</code>. Its binaries still run; rebuilding needs a fresh configure (<code>build/</code>). The old tree is left untouched.</p></div>
+  <div class="card"><h3>Submodule pins drifted</h3><p>All three submodules sit on different commits than recorded. Kept as-is — advancing a pin needs a build decision, see TODO.md.</p></div>
+</div>
+
+<footer>Generated from the repo on 2026-11-13 · Sources: README.md, HANDOFF.md, MEMORY.md, CMakeLists.txt, scripts/, ports/ ·
+Audit trail: docs/DASHBOARD_UI_AUDIT.md · Open this file directly in a browser — no server needed.</footer>
+</main>
+</body>
+</html>

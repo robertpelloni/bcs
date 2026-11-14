@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 0.3.25 - 2026-11-13
+- fixed fresh CMake configure broken by the rebrand: all modules/tools now
+  install to `BTKLibraryTargets`/`BTKBinaryTargets` (WebKit was the last
+  `CopperSpiceLibraryTargets` holdout), and the top level installs those
+  sets under the legacy `CopperSpice*Targets.cmake` file names and
+  `CopperSpice::` namespace, so both `BTKConfig` and `CopperSpiceConfig`
+  consumers keep working; verified: `cmake -S . -B build` now generates
+- resolved committed merge-conflict markers in `MEMORY.md` (union of both sides)
+- fixed root `start.bat`: it ran `go run .` where no Go main package exists;
+  it now runs the Go port in `ports/go` and propagates its exit code
+- added one-command build: `scripts/build-all.ps1` (ports in value order,
+  then C++ tools; below-normal priority; `-CheckOnly` layout regression check)
+  plus `scripts/README.md` inventory; script reports the stale
+  `build-vs2019` cache (configured at the old `…\workspace\btk` path)
+  instead of failing or deleting the owner's tree
+- fixed Rust port warning: unused `Mutex` import in `bcsapplication.rs`
+- added root docs: `VISION.md`, `ROADMAP.md`, `TODO.md`, `DEPLOY.md`,
+  `IDEAS.md`; filled the `SUBMODULE_INVENTORY.md` stub from live git state
+- consolidated dashboard: `docs/dashboard.html` (single static page, every
+  module/tool/port/test/workflow, value-ordered, tooltips) with the audit
+  and system-tray answer in `docs/DASHBOARD_UI_AUDIT.md`
+- verified: Go build+vet pass, Rust build passes, prebuilt `uic`/`rcc`
+  run, fresh C++ configure passes; C#/Java ports still lack build files
+
 ## 0.2.0 - 2026-04-08
 - completed comprehensive CopperSpice → BTK rebrand across all source files (4,282+ files)
 - updated all copyright/license comment headers from "This file is part of CopperSpice" to BTK

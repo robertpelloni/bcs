@@ -940,7 +940,7 @@ endif()
 install(
    # generate cmake files containing rules about linking with BTK libs
 
-   EXPORT CopperSpiceLibraryTargets
+   EXPORT BTKLibraryTargets
    NAMESPACE CopperSpice::
    FILE CopperSpiceLibraryTargets.cmake
    DESTINATION ${PKG_PREFIX_LEGACY}
@@ -948,7 +948,7 @@ install(
 
 if (PKG_PREFIX_LEGACY_ALT)
    install(
-      EXPORT CopperSpiceLibraryTargets
+      EXPORT BTKLibraryTargets
       NAMESPACE CopperSpice::
       FILE CopperSpiceLibraryTargets.cmake
       DESTINATION ${PKG_PREFIX_LEGACY_ALT}
@@ -956,7 +956,7 @@ if (PKG_PREFIX_LEGACY_ALT)
 endif()
 
 install(
-   EXPORT CopperSpiceLibraryTargets
+   EXPORT BTKLibraryTargets
    NAMESPACE CopperSpice::
    FILE CopperSpiceLibraryTargets.cmake
    DESTINATION ${BTK_PKG_PREFIX}
@@ -964,7 +964,7 @@ install(
 
 if (BTK_PKG_PREFIX_ALT)
    install(
-      EXPORT CopperSpiceLibraryTargets
+      EXPORT BTKLibraryTargets
       NAMESPACE CopperSpice::
       FILE CopperSpiceLibraryTargets.cmake
       DESTINATION ${BTK_PKG_PREFIX_ALT}
@@ -973,7 +973,7 @@ endif()
 
 install(
    # generate cmake files containing rules about running BTK binary tools
-   EXPORT CopperSpiceBinaryTargets
+   EXPORT BTKBinaryTargets
    NAMESPACE CopperSpice::
    FILE CopperSpiceBinaryTargets.cmake
    DESTINATION ${PKG_PREFIX_LEGACY}
@@ -981,7 +981,7 @@ install(
 
 if (PKG_PREFIX_LEGACY_ALT)
    install(
-      EXPORT CopperSpiceBinaryTargets
+      EXPORT BTKBinaryTargets
       NAMESPACE CopperSpice::
       FILE CopperSpiceBinaryTargets.cmake
       DESTINATION ${PKG_PREFIX_LEGACY_ALT}
@@ -989,7 +989,7 @@ if (PKG_PREFIX_LEGACY_ALT)
 endif()
 
 install(
-   EXPORT CopperSpiceBinaryTargets
+   EXPORT BTKBinaryTargets
    NAMESPACE CopperSpice::
    FILE CopperSpiceBinaryTargets.cmake
    DESTINATION ${BTK_PKG_PREFIX}
@@ -997,7 +997,7 @@ install(
 
 if (BTK_PKG_PREFIX_ALT)
    install(
-      EXPORT CopperSpiceBinaryTargets
+      EXPORT BTKBinaryTargets
       NAMESPACE CopperSpice::
       FILE CopperSpiceBinaryTargets.cmake
       DESTINATION ${BTK_PKG_PREFIX_ALT}

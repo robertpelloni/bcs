@@ -1,5 +1,16 @@
 # HANDOFF
 
+## Latest Session Additions (2026-11-13, Muse Spark in Muse Code in C:\Users\hyper\workspace\bcs on laptop)
+- **Dashboard truth**: this repo (BTK framework) has no web dashboard/server/tray app. The OmniDash web dashboard lives in `external/bqt-reference`. Delivered the honest equivalent: `docs/dashboard.html` (one static page, all modules/tools/ports/tests/workflows, value-ordered, tooltips) + `docs/DASHBOARD_UI_AUDIT.md` (page-by-page consolidation + tray answer: framework support in `src/gui/util/qsystemtrayicon.*`, no app instantiates it, no servers to quit).
+- **Fixed fresh-configure breakage from the rebrand** (root cause): modules/tools install to `BTKLibraryTargets`/`BTKBinaryTargets`, WebKit still used `CopperSpiceLibraryTargets`, and the top level only installed the CopperSpice sets → generate failed (`CsWebKit requires CsCore not in any export set`, `unknown export CopperSpiceBinaryTargets`). Fix: WebKit → `BTKLibraryTargets`; top-level 8 `install(EXPORT …)` blocks now export the BTK sets under legacy file names/namespaces. Verified `cmake -S . -B build -DBUILD_TESTS=OFF` exits 0.
+- **Resolved committed merge conflict in `MEMORY.md`** (union merge; no content lost).
+- **Fixed `start.bat`** (was `go run .` at root = guaranteed failure; now runs `ports/go`, propagates exit code). Verified: prints "BCS Framework - Go Port Initialization".
+- **Build system**: added `scripts/build-all.ps1` (+ `scripts/README.md`). Passes: Go build+vet, Rust build (1 remaining dead-field warning in `bcsapplication.rs`), `-CheckOnly` layout check. It detects the stale `build-vs2019` CMake cache (configured at old path `C:\Users\hyper\workspace\btk`) and skips with a clear message — owner's tree untouched, binaries in it still run (`uic --version` OK; `rcc` has no `--version` flag, use `-help`-style usage).
+- **Fresh C++ tools build** (`uic`,`rcc` in `build/`) was launched below-normal priority; check `build/bin/Release/` for completion. Full C++ test suites still need `-DBUILD_TESTS=ON` + ctest (TODO).
+- **Docs**: created `VISION.md`, `ROADMAP.md`, `TODO.md`, `DEPLOY.md`, `IDEAS.md`; filled `SUBMODULE_INVENTORY.md`. Version bumped to 0.3.25 (`VERSION` file; CMake ABI version 2.1.0 is separate and deliberate).
+- **Not done / needs owner**: submodule pins all differ from index (left untouched deliberately); 8 `build-vs2019-script-probe*` trees left in place (gitignored, huge, absolute paths inside); C# port has no `.csproj`, Java port no build file (both in TODO); `.hypernexus/` still untracked-undecided.
+- **Coordination note**: no other agent session (muse.ai / Gemini / ChatGPT via Edge CDP 9222) was reachable from this environment, so no cross-agent messages were sent; identity string for future use: `muse-wonder-1.0 in Muse Code in C:\Users\hyper\workspace\bcs on laptop`.
+
 ## Latest Session Additions
 - Completed comprehensive CopperSpice → BTK rebrand across all source files (4,282+ files updated)
 - Renamed all license/copyright headers, error messages, UI strings, cmake comments from CopperSpice to BTK
