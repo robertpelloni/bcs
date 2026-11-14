@@ -77,8 +77,8 @@ proves compilation, not correctness.
 ```powershell
 cd ports\go;     go build ./...;  go vet ./...     # module: ports/go/go.mod
 cd ports\rust;   cargo build;     cargo test
-cd ports\csharp; dotnet build    # needs a .csproj — see TODO.md (not present yet)
-cd ports\java;   javac -d out (Get-ChildItem -Recurse src -Filter *.java).FullName; java -cp out Main
+cd ports\csharp; dotnet build                     # Bcs.csproj (net8.0)
+cd ports\java;   javac -d out Main.java + src/**  # or just use build-all.ps1; run: java -cp out Main
 ```
 
 Root `start.bat` runs the Go port entry point (`ports/go`); it no
