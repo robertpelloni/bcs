@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 0.3.30 - 2026-11-14
+- GUI + Network suites now run: CsGui (Debug, /MP8, amd64 MSBuild —
+  the 32-bit node OOMs on warning volume) and CsNetwork build;
+  `CsGuiTest` 15/15 pass, `CsNetworkTest` 41/42 pass.
+- Known failure (documented): `QHostInfo basic_methods` pins
+  copperspice.com to one hardcoded IP (69.89.11.103); the domain now
+  resolves via Cloudflare to two anycast addresses, so the assertion
+  is stale upstream and the sync lookup can stall. Not rewritten —
+  upstream should stop pinning DNS answers.
+- Overall C++ baseline: Core 1081/1082, Gui 15/15, Network 41/42.
+  The two failures are one machine-zone-sensitive case
+  (`QDateTime std_chrono`, see TODO) and one live-DNS case.
+
 ## 0.3.29 - 2026-11-14
 - Fixed CsNetwork failing against OpenSSL 3/4 (installed: 4.1.0):
   ASN1_STRING became opaque in OpenSSL 1.1, so direct `->length`/`->data`/

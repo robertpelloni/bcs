@@ -23,7 +23,11 @@
       (configure `build-vs2019`, build `Release`, below-normal priority)
 - [x] Build with `-DBUILD_TESTS=ON` and run Catch2 core: **1081/1082 pass**
       (ctest needs `build\bin\Release` on PATH — see CHANGELOG 0.3.28)
-- [ ] Run Catch2 `test/gui` + `test/network` (build in progress in `build/`)
+- [x] Run Catch2 `test/gui` + `test/network` — Gui 15/15, Network 41/42
+      (Debug config; CsGui needs the amd64 MSBuild, 32-bit node OOMs)
+- [ ] `QHostInfo basic_methods` pins copperspice.com to IP 69.89.11.103;
+      the domain is now behind Cloudflare (2 anycast IPs) — upstream test
+      should assert lookup success/shape, not pinned DNS answers
 - [ ] `QDateTime std_chrono` (test/core/datetime/qdatetime.cpp:467): two
       stacked defects, analyzed 2026-11-14 — do not "fix" by tweaking one side.
       (a) Product: `QDateTime::fromStdLocalTime` (src/core/datetime/qdatetime.h:362)
