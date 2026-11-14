@@ -63,8 +63,10 @@
 ## UI representation (per VISION rule 1)
 
 - [ ] Audit C++ widgets for missing `setToolTip` / `setWhatsThis`
-- [ ] Confirm `Label`/`Description`/`Tooltip` exist on every ported widget
-      (Go, Rust, C#, Java), not just the `BcsWidget` baseline
+- [x] Confirm `Label`/`Description`/`Tooltip` exist on ported widgets —
+      verified 2026-11-14: all four `BcsWidget` baselines carry them
+      (go `bcswidget.go`, rust `bcswidget.rs`, csharp `BcsWidget.cs`,
+      java `BcsWidget.java`) and every widget inherits the baseline
 
 ## Cleanup (nondestructive)
 
