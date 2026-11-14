@@ -9,14 +9,14 @@ import os
 import sys
 import re
 
-# Directories to skip entirely
+# Directories to skip entirely. Any build* tree holds generated header
+# copies; auditing them double-reports whatever the sources contain.
 SKIP_DIRS = {
-    'external', '3rdparty', 'webkit', 'build-vs2019',
-    'build-vs2019-script-probe', 'build-vs2019-script-probe2',
-    'build-vs2019-script-probe3', 'build-vs2019-script-probe4',
-    'build-vs2019-script-probe5', 'build-vs2019-script-probe6',
-    'build-vs2019-stagea-script', 'build-vs2019-declarative-probe',
+    'external', '3rdparty', 'webkit',
 }
+
+def is_skip_dir(name):
+    return name in SKIP_DIRS or name.startswith('build')
 
 # Files that are expected to contain CopperSpice references (legacy compat)
 ALLOWED_FILES = {
@@ -35,10 +35,10 @@ CHECK_EXTENSIONS = {'.h', '.cpp', '.cmake', '.txt', '.py', '.ts'}
 
 def should_check(filepath):
     """Determine if a file should be checked."""
-    # Skip if in a skip directory
+    # Skip if in a skip directory (including any build* output tree)
     parts = filepath.replace('\\', '/').split('/')
-    for skip_dir in SKIP_DIRS:
-        if skip_dir in parts:
+    for part in parts:
+        if is_skip_dir(part):
             return False
 
     # Skip if it's an allowed legacy file
@@ -83,8 +83,8 @@ def main():
     files_checked = 0
 
     for dirpath, dirnames, filenames in os.walk('.'):
-        # Skip hidden and build directories
-        dirnames[:] = [d for d in dirnames if not d.startswith('.')]
+        # Skip hidden and build directories (prunes generated header copies)
+        dirnames[:] = [d for d in dirnames if not d.startswith('.') and not is_skip_dir(d)]
 
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
