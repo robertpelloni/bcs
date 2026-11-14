@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.3.29 - 2026-11-14
+- Fixed CsNetwork failing against OpenSSL 3/4 (installed: 4.1.0):
+  ASN1_STRING became opaque in OpenSSL 1.1, so direct `->length`/`->data`/
+  `->type` access in `qsslcertificate_openssl.cpp` and
+  `qsslsocket_openssl_symbols.cpp` no longer compiles. Now uses
+  `ASN1_STRING_length` / `ASN1_STRING_get0_data` / `ASN1_STRING_type`.
+  Verified: CsNetwork (Debug) builds and links.
+- Build knowledge (in DEPLOY.md): configure with `-DCMAKE_CXX_FLAGS=/MP8`
+  or library builds are serial and take hours; MSBuild's 32-bit node can
+  OOM aggregating warning output on CsGui — use the amd64 MSBuild.
+
 ## 0.3.28 - 2026-11-13
 - C++ test baseline established: fresh `build/` (VS2026/MSVC 19.52)
   configures, `CsCoreTest` runs under ctest: **1081 passed, 1 failed**

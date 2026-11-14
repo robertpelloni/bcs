@@ -120,11 +120,16 @@ QByteArray QSslCertificate::serialNumber() const
       serialNumber = d->x509->cert_info->serialNumber;
 #endif
 
-      QByteArray hexString;
-      hexString.reserve(serialNumber->length * 3);
+      // OpenSSL 1.1+ made ASN1_STRING opaque; use the public accessors
+      // instead of the struct fields (also required by OpenSSL 3/4).
+      const int serialLength = ASN1_STRING_length(serialNumber);
+      const unsigned char *serialData = ASN1_STRING_get0_data(serialNumber);
 
-      for (int a = 0; a < serialNumber->length; ++a) {
-         hexString += QByteArray::number(serialNumber->data[a], 16).rightJustified(2, '0');
+      QByteArray hexString;
+      hexString.reserve(serialLength * 3);
+
+      for (int a = 0; a < serialLength; ++a) {
+         hexString += QByteArray::number(serialData[a], 16).rightJustified(2, '0');
          hexString += ':';
       }
 
@@ -462,7 +467,8 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
 
          // keyid
          if (auth_key->keyid) {
-            QByteArray keyid(reinterpret_cast<const char *>(auth_key->keyid->data), auth_key->keyid->length);
+            QByteArray keyid(reinterpret_cast<const char *>(ASN1_STRING_get0_data(auth_key->keyid)),
+                             ASN1_STRING_length(auth_key->keyid));
             result[QString("keyid")] = keyid.toHex();
          }
 

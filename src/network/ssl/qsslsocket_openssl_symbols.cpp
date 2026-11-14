@@ -1357,10 +1357,12 @@ bool q_resolveOpenSslSymbols()
 //==============================================================================
 QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
 {
-   size_t lTimeLength = aTime->length;
-   char *pString = (char *) aTime->data;
+   // OpenSSL 1.1+ made ASN1_STRING opaque; use the public accessors.
+   size_t lTimeLength = ASN1_STRING_length(aTime);
+   char *pString = (char *) ASN1_STRING_get0_data(aTime);
+   const int lTimeType = ASN1_STRING_type(aTime);
 
-   if (aTime->type == V_ASN1_UTCTIME) {
+   if (lTimeType == V_ASN1_UTCTIME) {
 
       char lBuffer[24];
       char *pBuffer = lBuffer;
@@ -1427,7 +1429,7 @@ QDateTime q_getTimeFromASN1(const ASN1_TIME *aTime)
 
       return result;
 
-   } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
+   } else if (lTimeType == V_ASN1_GENERALIZEDTIME) {
 
       if (lTimeLength < 15) {
          return QDateTime();   // should not happen
