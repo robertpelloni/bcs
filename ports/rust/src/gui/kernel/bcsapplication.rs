@@ -31,6 +31,11 @@ impl BcsApplication {
         }
     }
 
+    // Mirrors QCoreApplication::arguments(): the stored command line.
+    pub fn arguments(&self) -> &[String] {
+        &self.args
+    }
+
     pub fn exec(&self) -> i32 {
         println!("BCS Application starting event loop...");
         self.event_loop.exec();

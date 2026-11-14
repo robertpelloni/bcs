@@ -51,8 +51,9 @@
     <p>Configure with <code>-DBUILD_TESTS=ON</code>, then
     <code>ctest --test-dir build -C Release --output-on-failure</code>.</p></div>
   <div class="card"><h3>Current health (2026-11-13) <span class="tip" title="Verified this session by running the commands, not copied from old logs.">ⓘ</span></h3>
-    <p>Go build+vet: pass · Rust build: pass (1 warning) · Fresh C++ configure: pass (after export fix) ·
-    Prebuilt tools in <code>build-vs2019\bin\Release</code>: run · C# / Java ports: source only, no build file yet.</p></div>
+    <p>Go build+vet: pass · Rust build: pass, warning-free · Fresh C++ build: configure + <code>uic</code>/<code>rcc</code>
+    compiled and run (BTK-branded) · Stale prebuilt tools in <code>build-vs2019</code>: run but pre-rebrand ·
+    C# / Java ports: source only, no build file yet.</p></div>
 </div>
 
 <h2>2 · Framework modules (C++, <code>src/</code>)</h2>

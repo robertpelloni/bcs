@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.3.26 - 2026-11-13
+- pushed v0.3.25 to origin/master using the workspace GitHub token
+  (stored credential had expired; token itself never printed)
+- verified the fresh C++ build end-to-end: `build/bin/Release/uic.exe`
+  reports "BTK User Interface Compiler version 1.0.0" (the stale
+  prebuilt in `build-vs2019` still says CopperSpice) and `rcc.exe` runs
+- Rust port now builds warning-free: added `BcsApplication::arguments()`
+  (mirrors `QCoreApplication::arguments()`) instead of leaving the
+  stored command line unread
+- scheduled autopilot continuation every 15 minutes (permanent cron)
+
 ## 0.3.25 - 2026-11-13
 - fixed fresh CMake configure broken by the rebrand: all modules/tools now
   install to `BTKLibraryTargets`/`BTKBinaryTargets` (WebKit was the last
