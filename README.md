@@ -1,3 +1,13 @@
+> **FROZEN — 2026-11-19 — Robert's call**
+>
+> This project is frozen for now. No new features, no upstream rebases or syncs, no version bumps.
+>
+> All three toolkit projects — bcs/BTK, bgtk/BOBGUI, and bqt/BQt — are frozen together. No canonical replacement has been picked. Kept as reference / port source only.
+>
+> Any revival requires Robert naming one canonical toolkit first in the "bcs bgtk and bqt main" chat.
+>
+> ---
+
 🛠️ ALPHA SOFTWARE UNDER CONSTRUCTION — Use at your own risk. Backwards compatibility not guaranteed.
 
 ```text
